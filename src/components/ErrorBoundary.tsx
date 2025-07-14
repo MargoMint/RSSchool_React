@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from './Button';
+import Button from './Button';
 
 export interface ErrorBoundaryState {
   hasError: boolean;
@@ -8,6 +8,7 @@ export interface ErrorBoundaryState {
 
 export interface Props {
   children: React.ReactNode;
+  onReset?: () => void;
 }
 
 export class ErrorBoundary extends Component<Props, ErrorBoundaryState> {
@@ -24,6 +25,11 @@ export class ErrorBoundary extends Component<Props, ErrorBoundaryState> {
     console.error('Error caught by ErrorBoundary:', error, errorInfo);
   }
 
+  handleReset = () => {
+    this.setState({ hasError: false, error: undefined });
+    this.props.onReset?.();
+  };
+
   render() {
     if (this.state.hasError) {
       return (
@@ -31,10 +37,8 @@ export class ErrorBoundary extends Component<Props, ErrorBoundaryState> {
           <h1 className="text-5xl uppercase text-red-800">
             Oops! Something went wrong
           </h1>
-          <h2 className="text-lg">{this.state.error?.message}</h2>
-          <Button onClick={() => this.setState({ hasError: false })}>
-            Try again
-          </Button>
+          <h2 className="text-lg mb-2">{this.state.error?.message}</h2>
+          <Button onClick={this.handleReset}>Try again</Button>
         </div>
       );
     }
