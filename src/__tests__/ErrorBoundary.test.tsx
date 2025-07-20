@@ -1,5 +1,6 @@
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 const ErrorThrowingComponent = ({ shouldThrow }: { shouldThrow: boolean }) => {
   if (shouldThrow) {
@@ -9,6 +10,8 @@ const ErrorThrowingComponent = ({ shouldThrow }: { shouldThrow: boolean }) => {
 };
 
 describe('ErrorBoundary', () => {
+  const userActions = userEvent.setup();
+
   test('renders child elements if there are no errors', () => {
     render(
       <ErrorBoundary>
@@ -18,7 +21,7 @@ describe('ErrorBoundary', () => {
     expect(screen.getByText('Test content')).toBeInTheDocument();
   });
 
-  test('catches and handles errors and displays fallback UI', () => {
+  test('catches and handles errors and displays fallback UI', async () => {
     render(
       <ErrorBoundary>
         <ErrorThrowingComponent shouldThrow={true} />
@@ -31,5 +34,8 @@ describe('ErrorBoundary', () => {
       })
     ).toBeInTheDocument();
     expect(screen.getByText('Test error')).toBeInTheDocument();
+
+    const tryAgainButton = screen.getByRole('button', { name: /Try again/i });
+    await userActions.click(tryAgainButton);
   });
 });
