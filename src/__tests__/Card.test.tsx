@@ -13,12 +13,10 @@ describe('Card', () => {
   });
 
   test('handles empty name and description gracefully', () => {
-    render(<Card name="" description="" />);
-    expect(
-      screen.getAllByRole('paragraph')[0] || screen.getByText('')
-    ).toBeInTheDocument();
-    expect(
-      screen.getAllByRole('paragraph')[1] || screen.getByText('')
-    ).toBeInTheDocument();
+    const { container } = render(<Card name="" description="" />);
+    const paragraphs = container.querySelectorAll('p');
+    expect(paragraphs).toHaveLength(2);
+    expect(paragraphs[0].textContent).toBe('');
+    expect(paragraphs[1].textContent).toBe('');
   });
 });
