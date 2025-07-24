@@ -9,10 +9,8 @@ function Search({ onSearch }: SearchProps) {
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
-    const savedTerm = localStorage.getItem('searchTerm');
-    if (savedTerm) {
-      setInputValue(savedTerm);
-    }
+    const savedTerm = localStorage.getItem('searchTerm') || '';
+    setInputValue(savedTerm);
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
