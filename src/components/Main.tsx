@@ -19,19 +19,20 @@ function Main() {
       setError(null);
 
       const trimmedQuery = term.trim();
-      const request = trimmedQuery
+      const dataPromise = trimmedQuery
         ? api.getPokemon(trimmedQuery)
         : api.getAllPokemons();
 
-      request
+      dataPromise
         .then((data) => {
           setResults(data);
-          setIsLoading(false);
         })
         .catch((err) => {
           setError(err.message);
-          setIsLoading(false);
           setResults([]);
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     },
     [api]
