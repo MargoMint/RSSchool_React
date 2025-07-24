@@ -26,6 +26,7 @@ describe('Main', () => {
     await waitFor(() =>
       expect(screen.getByText('BULBASAUR')).toBeInTheDocument()
     );
+    expect(screen.queryByText(/Loading/i)).not.toBeInTheDocument();
   });
 
   test('uses the searchTerm from localStorage when loading', async () => {
@@ -38,6 +39,7 @@ describe('Main', () => {
     await waitFor(() =>
       expect(screen.getByText('BULBASAUR')).toBeInTheDocument()
     );
+    expect(screen.queryByText(/Loading/i)).not.toBeInTheDocument();
   });
 
   test('shows loading indicator during fetch', async () => {
@@ -51,9 +53,10 @@ describe('Main', () => {
     resolveFetch([
       { name: 'bulbasaur', description: 'Abilities: overgrow, chlorophyll' },
     ]);
-    await waitFor(() =>
-      expect(screen.getByText('BULBASAUR')).toBeInTheDocument()
-    );
+    await waitFor(() => {
+      expect(screen.getByText('BULBASAUR')).toBeInTheDocument();
+      expect(screen.queryByText(/Loading/i)).not.toBeInTheDocument();
+    });
   });
 
   test('processes a successful response from the API', async () => {
@@ -88,6 +91,7 @@ describe('Main', () => {
     await waitFor(() =>
       expect(screen.getByText('BULBASAUR')).toBeInTheDocument()
     );
+    expect(screen.queryByText(/Loading/i)).not.toBeInTheDocument();
   });
 
   test('shows fallback UI when "Throw Error" button is clicked', async () => {
