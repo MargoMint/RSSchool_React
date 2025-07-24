@@ -1,55 +1,46 @@
-import React, { Component } from 'react';
+import { useState, useEffect } from 'react';
 import Button from './Button';
 
 interface SearchProps {
   onSearch: (term: string) => void;
 }
 
-interface SearchState {
-  inputValue: string;
-}
+function Search({ onSearch }: SearchProps) {
+  const [inputValue, setInputValue] = useState('');
 
-class Search extends Component<SearchProps, SearchState> {
-  constructor(props: SearchProps) {
-    super(props);
-    this.state = { inputValue: '' };
-  }
-
-  componentDidMount(): void {
+  useEffect(() => {
     const savedTerm = localStorage.getItem('searchTerm');
     if (savedTerm) {
-      this.setState({ inputValue: savedTerm });
+      setInputValue(savedTerm);
     }
-  }
+  }, []);
 
-  handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ inputValue: e.target.value });
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
   };
 
-  handleSearch = () => {
-    const trimmed = this.state.inputValue.trim();
-    this.props.onSearch(trimmed);
-    localStorage.setItem('searchTerm', trimmed);
+  const handleSearch = () => {
+    const trimmedValue = inputValue.trim();
+    onSearch(trimmedValue);
+    localStorage.setItem('searchTerm', trimmedValue);
   };
 
-  handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') this.handleSearch();
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') handleSearch();
   };
 
-  render() {
-    return (
-      <div className="flex gap-4 justify-center items-center p-4">
-        <input
-          type="text"
-          className="border border-gray-400 rounded-lg px-4 py-2 w-64"
-          value={this.state.inputValue}
-          onChange={this.handleInputChange}
-          onKeyPress={this.handleKeyPress}
-        />
-        <Button onClick={this.handleSearch}>Search</Button>
-      </div>
-    );
-  }
+  return (
+    <div className="flex gap-4 justify-center items-center p-4">
+      <input
+        type="text"
+        className="border border-gray-400 rounded-lg px-4 py-2 w-64"
+        value={inputValue}
+        onChange={handleInputChange}
+        onKeyPress={handleKeyPress}
+      />
+      <Button onClick={handleSearch}>Search</Button>
+    </div>
+  );
 }
 
 export default Search;

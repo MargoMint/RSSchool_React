@@ -11,7 +11,7 @@ export interface Props {
   onReset?: () => void;
 }
 
-export class ErrorBoundary extends Component<Props, ErrorBoundaryState> {
+class ErrorBoundary extends Component<Props, ErrorBoundaryState> {
   constructor(props: Props) {
     super(props);
     this.state = { hasError: false };
@@ -45,3 +45,5 @@ export class ErrorBoundary extends Component<Props, ErrorBoundaryState> {
     return this.props.children;
   }
 }
+
+export default ErrorBoundary;
