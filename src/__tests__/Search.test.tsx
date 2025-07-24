@@ -1,9 +1,11 @@
 import Search from '../components/Search';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { setupLocalStorageMock } from '../test-utils/clearMock';
+import userEvent from '@testing-library/user-event';
 
 describe('Search', () => {
   const mockOnSearch = jest.fn();
+  const userActions = userEvent.setup();
 
   setupLocalStorageMock();
 
@@ -19,33 +21,35 @@ describe('Search', () => {
     expect(screen.getByRole('textbox')).toHaveValue('bulbasaur');
   });
 
-  test('calls onSearch and stores the trimmed value in localStorage', () => {
+  test('calls onSearch and stores the trimmed value in localStorage', async () => {
     render(<Search onSearch={mockOnSearch} />);
     const searchInput = screen.getByRole('textbox');
     const searchButton = screen.getByRole('button', { name: /Search/i });
-    fireEvent.change(searchInput, { target: { value: '   bulbasaur   ' } });
-    fireEvent.click(searchButton);
+
+    await userActions.clear(searchInput);
+    await userActions.type(searchInput, '   bulbasaur   ');
+    await userActions.click(searchButton);
+
     expect(mockOnSearch).toHaveBeenCalledWith('bulbasaur');
     expect(localStorage.getItem('searchTerm')).toBe('bulbasaur');
   });
 
-  test('triggers a search when pressing Enter', () => {
+  test('triggers a search when pressing Enter', async () => {
     render(<Search onSearch={mockOnSearch} />);
     const searchInput = screen.getByRole('textbox');
-    fireEvent.change(searchInput, { target: { value: 'bulbasaur' } });
-    fireEvent.keyPress(searchInput, {
-      key: 'Enter',
-      code: 'Enter',
-      charCode: 13,
-    });
+
+    await userActions.clear(searchInput);
+    await userActions.type(searchInput, 'bulbasaur');
+    await userActions.keyboard('{Enter}');
+
     expect(mockOnSearch).toHaveBeenCalledWith('bulbasaur');
     expect(localStorage.getItem('searchTerm')).toBe('bulbasaur');
   });
 
-  test('updates input value when user types', () => {
+  test('updates input value when user types', async () => {
     render(<Search onSearch={mockOnSearch} />);
     const searchInput = screen.getByRole('textbox');
-    fireEvent.change(searchInput, { target: { value: 'bulbasaur' } });
+    await userActions.type(searchInput, 'bulbasaur');
     expect(searchInput).toHaveValue('bulbasaur');
   });
 });
