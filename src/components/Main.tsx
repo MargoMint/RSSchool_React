@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import Layout from './Layout';
 import Search from './Search';
 import Api from '../utils/Api';
@@ -11,6 +11,7 @@ function Main() {
   const [error, setError] = useState<string | null>(null);
   const [results, setResults] = useState<CardListItem[]>([]);
   const api = useMemo(() => new Api(), []);
+  const requestCompleted = useRef(false);
 
   const fetchData = useCallback(
     (term: string) => {
@@ -37,6 +38,8 @@ function Main() {
   );
 
   useEffect(() => {
+    if (requestCompleted.current) return;
+    requestCompleted.current = true;
     const savedTerm = localStorage.getItem('searchTerm') || '';
     fetchData(savedTerm);
   }, [fetchData]);
