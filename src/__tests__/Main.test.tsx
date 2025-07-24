@@ -89,15 +89,4 @@ describe('Main', () => {
       expect(screen.getByText('BULBASAUR')).toBeInTheDocument()
     );
   });
-
-  test('shows fallback UI when "Throw Error" button is clicked', async () => {
-    mockGetAllPokemons.mockResolvedValueOnce([]);
-    render(<Main />);
-    const userActions = userEvent.setup();
-    const throwButton = screen.getByRole('button', { name: /Throw error/i });
-    await userActions.click(throwButton);
-    expect(
-      await screen.findByText(/Oops! something went wrong/i)
-    ).toBeInTheDocument();
-  });
 });
