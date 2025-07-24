@@ -24,7 +24,7 @@ describe('Main', () => {
     render(<Main />);
     expect(mockGetAllPokemons).toHaveBeenCalled();
     await waitFor(() =>
-      expect(screen.getByText('BULBASAUR')).toBeInTheDocument()
+      expect(screen.getByText('bulbasaur')).toBeInTheDocument()
     );
   });
 
@@ -36,7 +36,7 @@ describe('Main', () => {
     render(<Main />);
     expect(mockGetPokemon).toHaveBeenCalledWith('bulbasaur');
     await waitFor(() =>
-      expect(screen.getByText('BULBASAUR')).toBeInTheDocument()
+      expect(screen.getByText('bulbasaur')).toBeInTheDocument()
     );
   });
 
@@ -52,7 +52,7 @@ describe('Main', () => {
       { name: 'bulbasaur', description: 'Abilities: overgrow, chlorophyll' },
     ]);
     await waitFor(() =>
-      expect(screen.getByText('BULBASAUR')).toBeInTheDocument()
+      expect(screen.getByText('bulbasaur')).toBeInTheDocument()
     );
   });
 
@@ -62,7 +62,7 @@ describe('Main', () => {
     ]);
     render(<Main />);
     await waitFor(() =>
-      expect(screen.getByText('BULBASAUR')).toBeInTheDocument()
+      expect(screen.getByText('bulbasaur')).toBeInTheDocument()
     );
   });
 
@@ -86,7 +86,7 @@ describe('Main', () => {
     expect(localStorage.getItem('searchTerm')).toBe('bulbasaur');
     expect(mockGetPokemon).toHaveBeenCalledWith('bulbasaur');
     await waitFor(() =>
-      expect(screen.getByText('BULBASAUR')).toBeInTheDocument()
+      expect(screen.getByText('bulbasaur')).toBeInTheDocument()
     );
   });
 });

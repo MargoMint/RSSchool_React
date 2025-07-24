@@ -6,7 +6,7 @@ describe('Card', () => {
     render(
       <Card name="bulbasaur" description="Abilities: overgrow, chlorophyll" />
     );
-    expect(screen.getByText('BULBASAUR')).toBeInTheDocument();
+    expect(screen.getByText('bulbasaur')).toBeInTheDocument();
     expect(
       screen.getByText('Abilities: overgrow, chlorophyll')
     ).toBeInTheDocument();
