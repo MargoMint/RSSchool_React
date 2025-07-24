@@ -38,7 +38,7 @@ function Search({ onSearch }: SearchProps) {
         onChange={handleInputChange}
         onKeyPress={handleKeyPress}
       />
-      <Button onClick={handleSearch}>Search</Button>
+      <Button onClick={handleSearch} title="Search" />
     </div>
   );
 }

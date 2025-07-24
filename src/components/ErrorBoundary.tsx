@@ -38,7 +38,7 @@ class ErrorBoundary extends Component<Props, ErrorBoundaryState> {
             Oops! Something went wrong
           </h1>
           <h2 className="text-lg mb-2">{this.state.error?.message}</h2>
-          <Button onClick={this.handleReset}>Try again</Button>
+          <Button onClick={this.handleReset} title="Try again" />
         </div>
       );
     }

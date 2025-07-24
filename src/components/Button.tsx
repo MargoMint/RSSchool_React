@@ -1,17 +1,16 @@
-import React from 'react';
-
 interface ButtonProps {
   onClick: () => void;
-  children: React.ReactNode;
+  title: string;
+  className?: string;
 }
 
-function Button({ onClick, children }: ButtonProps) {
+function Button({ onClick, title, className = '' }: ButtonProps) {
   return (
     <button
       onClick={onClick}
-      className={'bg-red-800 text-white rounded-md px-4 py-2'}
+      className={`bg-red-800 text-white rounded-md px-4 py-2 ${className}`}
     >
-      {children}
+      {title}
     </button>
   );
 }
