@@ -1,6 +1,9 @@
-import type { CardListItem } from '../types/Card';
+interface CardProps {
+  name: string;
+  description: string;
+}
 
-function Card({ name, description }: CardListItem) {
+function Card({ name, description }: CardProps) {
   return (
     <div className="flex items-center justify-between border border-red-300 rounded-lg p-4 shadow">
       <p className="text-xl font-bold uppercase text-red-800">{name}</p>

@@ -4,12 +4,12 @@ import Search from './Search';
 import Api from '../utils/Api';
 import ErrorBoundary from './ErrorBoundary';
 import ResultsArea from './ResultsArea';
-import type { CardListItem } from '../types/Card';
+import type { Pokemon } from '../types/Pokemon';
 
 function Main() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [results, setResults] = useState<CardListItem[]>([]);
+  const [results, setResults] = useState<Pokemon[]>([]);
   const api = useMemo(() => new Api(), []);
   const requestCompleted = useRef(false);
 
