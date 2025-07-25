@@ -1,7 +1,10 @@
 import Button from '../components/Button';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 describe('Button', () => {
+  const userActions = userEvent.setup();
+
   test('renders button title correctly', () => {
     render(<Button onClick={() => {}} title="The label on the button" />);
     expect(screen.getByRole('button')).toHaveTextContent(
@@ -14,10 +17,10 @@ describe('Button', () => {
     expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
-  test('clicking on the button triggers onClick', () => {
+  test('clicking on the button triggers onClick', async () => {
     const handleClick = jest.fn();
     render(<Button onClick={handleClick} title="The label on the button" />);
-    fireEvent.click(screen.getByRole('button'));
+    await userActions.click(screen.getByRole('button'));
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 

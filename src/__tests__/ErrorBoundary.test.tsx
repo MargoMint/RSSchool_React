@@ -10,6 +10,14 @@ const ErrorThrowingComponent = ({ shouldThrow }: { shouldThrow: boolean }) => {
 };
 
 describe('ErrorBoundary', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    (console.error as jest.Mock).mockRestore();
+  });
+
   const userActions = userEvent.setup();
 
   test('renders child elements if there are no errors', () => {

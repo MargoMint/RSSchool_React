@@ -17,6 +17,14 @@ const mockGetPokemon = jest.fn();
 setupLocalStorageMock();
 
 describe('Main', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    (console.error as jest.Mock).mockRestore();
+  });
+
   test('calls getAllPokemons on mount if no searchTerm in localStorage', async () => {
     mockGetAllPokemons.mockResolvedValueOnce([
       { name: 'bulbasaur', description: 'Abilities: overgrow, chlorophyll' },
@@ -26,6 +34,7 @@ describe('Main', () => {
     await waitFor(() =>
       expect(screen.getByText('bulbasaur')).toBeInTheDocument()
     );
+    expect(screen.queryByText(/Loading/i)).not.toBeInTheDocument();
   });
 
   test('uses the searchTerm from localStorage when loading', async () => {
@@ -38,6 +47,7 @@ describe('Main', () => {
     await waitFor(() =>
       expect(screen.getByText('bulbasaur')).toBeInTheDocument()
     );
+    expect(screen.queryByText(/Loading/i)).not.toBeInTheDocument();
   });
 
   test('shows loading indicator during fetch', async () => {
@@ -51,9 +61,10 @@ describe('Main', () => {
     resolveFetch([
       { name: 'bulbasaur', description: 'Abilities: overgrow, chlorophyll' },
     ]);
-    await waitFor(() =>
-      expect(screen.getByText('bulbasaur')).toBeInTheDocument()
-    );
+    await waitFor(() => {
+      expect(screen.getByText('bulbasaur')).toBeInTheDocument();
+      expect(screen.queryByText(/Loading/i)).not.toBeInTheDocument();
+    });
   });
 
   test('processes a successful response from the API', async () => {
@@ -88,5 +99,6 @@ describe('Main', () => {
     await waitFor(() =>
       expect(screen.getByText('bulbasaur')).toBeInTheDocument()
     );
+    expect(screen.queryByText(/Loading/i)).not.toBeInTheDocument();
   });
 });
