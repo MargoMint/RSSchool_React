@@ -1,15 +1,21 @@
 interface ButtonProps {
   onClick: () => void;
   title: string;
-  className?: string;
+  variant: 'primary' | 'outline';
 }
 
-function Button({ onClick, title, className = '' }: ButtonProps) {
+function Button({ onClick, title, variant }: ButtonProps) {
+  const baseClasses = 'rounded-md px-4 py-2 font-medium hover:cursor-pointer';
+
+  const variantClasses = {
+    primary: 'bg-red-800 text-white',
+    outline: 'border-2 border-red-800 text-red-800 bg-white',
+  };
+
+  const finalClassName = `${baseClasses} ${variantClasses[variant]}`.trim();
+
   return (
-    <button
-      onClick={onClick}
-      className={`bg-red-800 text-white rounded-md px-4 py-2 ${className}`}
-    >
+    <button onClick={onClick} className={finalClassName}>
       {title}
     </button>
   );
