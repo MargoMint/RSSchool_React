@@ -5,7 +5,10 @@ interface CardProps {
 
 function Card({ name, description }: CardProps) {
   return (
-    <div className="flex items-center justify-between border border-red-300 rounded-lg p-4 shadow">
+    <div
+      data-testid="card"
+      className="flex items-center justify-between border border-red-300 rounded-lg p-4 shadow"
+    >
       <p className="text-xl font-bold uppercase text-red-800">{name}</p>
       <p className="text-gray-700">{description}</p>
     </div>

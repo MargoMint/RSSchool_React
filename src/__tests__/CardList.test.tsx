@@ -19,13 +19,13 @@ describe('CardList', () => {
     { id: 5, name: 'charmeleon', description: 'Abilities: blaze, solar-power' },
   ];
 
-  test('renders correct number of items when data is provided', () => {
+  test('renders correct number of of Card components', () => {
     render(<CardList cardItems={cardListItems} />);
-    expect(screen.getAllByText(/Abilities:/i)).toHaveLength(5);
+    expect(screen.getAllByTestId('card')).toHaveLength(5);
   });
 
   test('renders empty state when no items', () => {
     render(<CardList cardItems={[]} />);
-    expect(screen.queryAllByText(/Abilities:/i).length).toBe(0);
+    expect(screen.queryAllByTestId('card').length).toBe(0);
   });
 });
