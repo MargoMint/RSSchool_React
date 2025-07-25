@@ -23,7 +23,7 @@ function Search({ onSearch }: SearchProps) {
     localStorage.setItem('searchTerm', trimmedValue);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') handleSearch();
   };
 
@@ -34,7 +34,7 @@ function Search({ onSearch }: SearchProps) {
         className="border border-gray-400 rounded-lg px-4 py-2 w-64"
         value={inputValue}
         onChange={handleInputChange}
-        onKeyPress={handleKeyPress}
+        onKeyDown={handleKeyDown}
       />
       <Button onClick={handleSearch} title="Search" />
     </div>
