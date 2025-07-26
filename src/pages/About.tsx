@@ -1,5 +1,7 @@
 import Header from '../components/Header';
 import Layout from '../components/Layout';
+import Button from '../components/Button';
+import { Link } from 'react-router-dom';
 
 function AboutPage() {
   return (
@@ -30,9 +32,17 @@ function AboutPage() {
             </a>
           </p>
 
-          <hr className="border-t border-gray-300 w-1/2 mx-auto" />
+          <div className="text-center mt-8">
+            <Link to="/">
+              <Button
+                title="Back to Home"
+                onClick={() => {}}
+                variant="outline"
+              />
+            </Link>
+          </div>
 
-          <p>
+          <p className="border-t border-gray-300 w-1/2 mx-auto pt-4">
             <a
               className="text-red-700 font-medium underline"
               href="https://github.com/MargoMint"

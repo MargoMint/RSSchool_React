@@ -5,6 +5,7 @@ import Api from '../utils/Api';
 import ErrorBoundary from './ErrorBoundary';
 import ResultsArea from './ResultsArea';
 import type { Pokemon } from '../types/Pokemon';
+import { Link } from 'react-router-dom';
 
 function Main() {
   const [isLoading, setIsLoading] = useState(false);
@@ -52,6 +53,12 @@ function Main() {
 
   return (
     <Layout>
+      <div className="text-center">
+        Curious about who created this Pokemon search app? Visit the
+        <Link to={'/about'}>
+          <p className="text-red-700 font-medium hover:underline">About Page</p>
+        </Link>
+      </div>
       <Search onSearch={onSearch} />
       <ErrorBoundary>
         <ResultsArea isLoading={isLoading} error={error} results={results} />

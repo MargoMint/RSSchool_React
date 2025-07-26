@@ -3,6 +3,7 @@ import Api from '../utils/Api';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { setupLocalStorageMock } from '../test-utils/clearMock';
+import { MemoryRouter } from 'react-router-dom';
 
 jest.mock('../utils/Api');
 
@@ -29,7 +30,11 @@ describe('Main', () => {
     mockGetAllPokemons.mockResolvedValueOnce([
       { name: 'bulbasaur', description: 'Abilities: overgrow, chlorophyll' },
     ]);
-    render(<Main />);
+    render(
+      <MemoryRouter>
+        <Main />
+      </MemoryRouter>
+    );
     expect(mockGetAllPokemons).toHaveBeenCalled();
     await waitFor(() =>
       expect(screen.getByText('bulbasaur')).toBeInTheDocument()
@@ -42,7 +47,11 @@ describe('Main', () => {
     mockGetPokemon.mockResolvedValueOnce([
       { name: 'bulbasaur', description: 'Abilities: overgrow, chlorophyll' },
     ]);
-    render(<Main />);
+    render(
+      <MemoryRouter>
+        <Main />
+      </MemoryRouter>
+    );
     expect(mockGetPokemon).toHaveBeenCalledWith('bulbasaur');
     await waitFor(() =>
       expect(screen.getByText('bulbasaur')).toBeInTheDocument()
@@ -56,7 +65,11 @@ describe('Main', () => {
       resolveFetch = resolve;
     });
     mockGetAllPokemons.mockReturnValueOnce(promise);
-    render(<Main />);
+    render(
+      <MemoryRouter>
+        <Main />
+      </MemoryRouter>
+    );
     expect(screen.getByText(/Loading/i)).toBeInTheDocument();
     resolveFetch([
       { name: 'bulbasaur', description: 'Abilities: overgrow, chlorophyll' },
@@ -71,7 +84,11 @@ describe('Main', () => {
     mockGetAllPokemons.mockResolvedValueOnce([
       { name: 'bulbasaur', description: 'Abilities: overgrow, chlorophyll' },
     ]);
-    render(<Main />);
+    render(
+      <MemoryRouter>
+        <Main />
+      </MemoryRouter>
+    );
     await waitFor(() =>
       expect(screen.getByText('bulbasaur')).toBeInTheDocument()
     );
@@ -79,7 +96,11 @@ describe('Main', () => {
 
   test('displays an error when the API crashes', async () => {
     mockGetAllPokemons.mockRejectedValueOnce(new Error('API Error'));
-    render(<Main />);
+    render(
+      <MemoryRouter>
+        <Main />
+      </MemoryRouter>
+    );
     await waitFor(() => {
       expect(screen.getByText(/API Error/i)).toBeInTheDocument();
     });
@@ -90,7 +111,11 @@ describe('Main', () => {
     mockGetPokemon.mockResolvedValueOnce([
       { name: 'bulbasaur', description: 'Abilities: overgrow, chlorophyll' },
     ]);
-    render(<Main />);
+    render(
+      <MemoryRouter>
+        <Main />
+      </MemoryRouter>
+    );
     const userActions = userEvent.setup();
     await userActions.type(screen.getByRole('textbox'), 'bulbasaur');
     await userActions.click(screen.getByRole('button', { name: /search/i }));
