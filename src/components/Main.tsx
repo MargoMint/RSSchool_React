@@ -6,11 +6,13 @@ import ErrorBoundary from './ErrorBoundary';
 import ResultsArea from './ResultsArea';
 import type { Pokemon } from '../types/Pokemon';
 import { Link } from 'react-router-dom';
+import useLocalStorage from '../hooks/LocalStorageHook';
 
 function Main() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [results, setResults] = useState<Pokemon[]>([]);
+  const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
   const api = useMemo(() => new Api(), []);
   const requestCompleted = useRef(false);
 
@@ -42,12 +44,11 @@ function Main() {
   useEffect(() => {
     if (requestCompleted.current) return;
     requestCompleted.current = true;
-    const savedTerm = localStorage.getItem('searchTerm') || '';
-    fetchData(savedTerm);
-  }, [fetchData]);
+    fetchData(searchTerm);
+  }, [fetchData, searchTerm]);
 
   const onSearch = (term: string) => {
-    localStorage.setItem('searchTerm', term);
+    setSearchTerm(term);
     fetchData(term);
   };
 

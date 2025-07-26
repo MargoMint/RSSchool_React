@@ -1,17 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Button from './Button';
+import useLocalStorage from '../hooks/LocalStorageHook';
 
 interface SearchProps {
   onSearch: (term: string) => void;
 }
 
 function Search({ onSearch }: SearchProps) {
-  const [inputValue, setInputValue] = useState('');
-
-  useEffect(() => {
-    const savedTerm = localStorage.getItem('searchTerm') || '';
-    setInputValue(savedTerm);
-  }, []);
+  const [savedValue, setSavedValue] = useLocalStorage('searchTerm', '');
+  const [inputValue, setInputValue] = useState(savedValue);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -20,7 +17,7 @@ function Search({ onSearch }: SearchProps) {
   const handleSearch = () => {
     const trimmedValue = inputValue.trim();
     onSearch(trimmedValue);
-    localStorage.setItem('searchTerm', trimmedValue);
+    setSavedValue(trimmedValue);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
