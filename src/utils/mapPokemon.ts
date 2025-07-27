@@ -4,11 +4,21 @@ import { formatAbilities } from './formatAbilities';
 interface RawPokemon {
   id: number;
   name: string;
+  height: number;
+  weight: number;
+  types: {
+    type: {
+      name: string;
+    };
+  }[];
   abilities: {
     ability: {
       name: string;
     };
   }[];
+  sprites: {
+    front_default: string;
+  };
 }
 
 export function mapPokemon(data: RawPokemon): Pokemon {
@@ -24,8 +34,12 @@ export function mapPokemon(data: RawPokemon): Pokemon {
   }
 
   return {
+    image: data.sprites.front_default,
     id: data.id,
     name: data.name,
-    description: `Abilities: ${formatAbilities(data.abilities)}`,
+    height: data.height,
+    weight: data.weight,
+    types: data.types.map((typeItem) => typeItem.type.name),
+    description: `${formatAbilities(data.abilities)}`,
   };
 }

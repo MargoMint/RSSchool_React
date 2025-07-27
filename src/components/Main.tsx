@@ -5,7 +5,7 @@ import Api from '../utils/Api';
 import ErrorBoundary from './ErrorBoundary';
 import ResultsArea from './ResultsArea';
 import type { Pokemon } from '../types/Pokemon';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, Outlet } from 'react-router-dom';
 import useLocalStorage from '../hooks/LocalStorageHook';
 import Button from './Button';
 
@@ -20,6 +20,11 @@ function Main() {
   const currentPage = Number(searchParams.get('page')) || 1;
   const limit = 10;
   const offset = (currentPage - 1) * limit;
+
+  const handleCardClick = (name: string) => {
+    searchParams.set('details', name);
+    setSearchParams(searchParams);
+  };
 
   const fetchData = useCallback(() => {
     setIsLoading(true);
@@ -64,28 +69,41 @@ function Main() {
 
       <Search onSearch={onSearch} />
 
-      <ErrorBoundary>
-        <ResultsArea isLoading={isLoading} error={error} results={results} />
-      </ErrorBoundary>
+      <div className="flex flex-col md:flex-row">
+        <div className="md:w-2/3">
+          <ErrorBoundary>
+            <ResultsArea
+              isLoading={isLoading}
+              error={error}
+              results={results}
+              onCardClick={handleCardClick}
+            />
+          </ErrorBoundary>
 
-      {!searchTerm && (
-        <div className="flex justify-center gap-4 my-6">
-          <Button
-            title="Prev"
-            variant="outline"
-            onClick={() => {
-              if (currentPage > 1) {
-                setSearchParams({ page: String(currentPage - 1) });
-              }
-            }}
-          />
-          <Button
-            title="Next"
-            variant="primary"
-            onClick={() => setSearchParams({ page: String(currentPage + 1) })}
-          />
+          {!searchTerm && (
+            <div className="flex justify-center gap-4 my-6">
+              <Button
+                title="Prev"
+                variant="outline"
+                onClick={() => {
+                  if (currentPage > 1) {
+                    setSearchParams({ page: String(currentPage - 1) });
+                  }
+                }}
+              />
+              <Button
+                title="Next"
+                variant="primary"
+                onClick={() =>
+                  setSearchParams({ page: String(currentPage + 1) })
+                }
+              />
+            </div>
+          )}
         </div>
-      )}
+
+        <Outlet />
+      </div>
     </Layout>
   );
 }

@@ -15,10 +15,16 @@ describe('Api class', () => {
       const mockResponse = {
         id: 1,
         name: 'bulbasaur',
+        height: 7,
+        weight: 69,
+        types: [{ type: { name: 'grass' } }, { type: { name: 'poison' } }],
         abilities: [
           { ability: { name: 'overgrow' } },
           { ability: { name: 'chlorophyll' } },
         ],
+        sprites: {
+          front_default: 'https://example.com/bulbasaur.png',
+        },
       };
 
       (fetch as jest.Mock).mockResolvedValueOnce({
@@ -33,7 +39,11 @@ describe('Api class', () => {
         {
           id: 1,
           name: 'bulbasaur',
-          description: 'Abilities: overgrow, chlorophyll',
+          height: 7,
+          weight: 69,
+          types: ['grass', 'poison'],
+          description: 'overgrow, chlorophyll',
+          image: 'https://example.com/bulbasaur.png',
         },
       ]);
     });
@@ -50,10 +60,55 @@ describe('Api class', () => {
       const malformedResponse = {
         id: 1,
         name: 'bulbasaur',
+        height: 7,
+        weight: 69,
+        types: [{ type: { name: 'grass' } }],
+        sprites: {
+          front_default: 'https://example.com/bulbasaur.png',
+        },
+        // abilities отсутствуют
       };
       (fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         json: async () => malformedResponse,
+      });
+      await expect(api.getPokemon('bulbasaur')).rejects.toThrow();
+    });
+
+    test('should throw if ability.name is missing', async () => {
+      const invalidResponse = {
+        id: 1,
+        name: 'bulbasaur',
+        height: 7,
+        weight: 69,
+        types: [{ type: { name: 'grass' } }],
+        abilities: [{ ability: {} }],
+        sprites: {
+          front_default: 'https://example.com/bulbasaur.png',
+        },
+      };
+      (fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => invalidResponse,
+      });
+      await expect(api.getPokemon('bulbasaur')).rejects.toThrow();
+    });
+
+    test('should throw if id is not a number', async () => {
+      const invalidResponse = {
+        id: 'NaN',
+        name: 'bulbasaur',
+        height: 7,
+        weight: 69,
+        types: [{ type: { name: 'grass' } }],
+        abilities: [{ ability: { name: 'overgrow' } }],
+        sprites: {
+          front_default: 'https://example.com/bulbasaur.png',
+        },
+      };
+      (fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => invalidResponse,
       });
       await expect(api.getPokemon('bulbasaur')).rejects.toThrow();
     });
@@ -72,12 +127,24 @@ describe('Api class', () => {
         {
           id: 1,
           name: 'bulbasaur',
+          height: 7,
+          weight: 69,
+          types: [{ type: { name: 'grass' } }, { type: { name: 'poison' } }],
           abilities: [{ ability: { name: 'overgrow' } }],
+          sprites: {
+            front_default: 'https://example.com/bulbasaur.png',
+          },
         },
         {
           id: 2,
           name: 'ivysaur',
+          height: 10,
+          weight: 130,
+          types: [{ type: { name: 'grass' } }, { type: { name: 'poison' } }],
           abilities: [{ ability: { name: 'chlorophyll' } }],
+          sprites: {
+            front_default: 'https://example.com/ivysaur.png',
+          },
         },
       ];
 
@@ -101,12 +168,20 @@ describe('Api class', () => {
         {
           id: 1,
           name: 'bulbasaur',
-          description: 'Abilities: overgrow',
+          height: 7,
+          weight: 69,
+          types: ['grass', 'poison'],
+          description: 'overgrow',
+          image: 'https://example.com/bulbasaur.png',
         },
         {
           id: 2,
           name: 'ivysaur',
-          description: 'Abilities: chlorophyll',
+          height: 10,
+          weight: 130,
+          types: ['grass', 'poison'],
+          description: 'chlorophyll',
+          image: 'https://example.com/ivysaur.png',
         },
       ]);
     });
@@ -127,32 +202,6 @@ describe('Api class', () => {
         json: async () => malformedListResponse,
       });
       await expect(api.getAllPokemons()).rejects.toThrow();
-    });
-
-    test('should throw if ability.name is missing', async () => {
-      const invalidResponse = {
-        id: 1,
-        name: 'bulbasaur',
-        abilities: [{ ability: {} }],
-      };
-      (fetch as jest.Mock).mockResolvedValueOnce({
-        ok: true,
-        json: async () => invalidResponse,
-      });
-      await expect(api.getPokemon('bulbasaur')).rejects.toThrow();
-    });
-
-    test('should throw if id is not a number', async () => {
-      const invalidResponse = {
-        id: 'NaN',
-        name: 'bulbasaur',
-        abilities: [{ ability: { name: 'overgrow' } }],
-      };
-      (fetch as jest.Mock).mockResolvedValueOnce({
-        ok: true,
-        json: async () => invalidResponse,
-      });
-      await expect(api.getPokemon('bulbasaur')).rejects.toThrow();
     });
   });
 });
