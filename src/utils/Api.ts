@@ -1,5 +1,5 @@
 import type { Pokemon } from '../types/Pokemon';
-import { POKEMON_ENDPOINT, POKEMON_LIST_QUERY } from '../constants/api';
+import { POKEMON_ENDPOINT } from '../constants/api';
 import { mapPokemon } from './mapPokemon';
 
 class Api {
@@ -10,8 +10,10 @@ class Api {
     return [mapPokemon(data)];
   }
 
-  async getAllPokemons(): Promise<Pokemon[]> {
-    const response = await fetch(`${POKEMON_ENDPOINT}/${POKEMON_LIST_QUERY}`);
+  async getAllPokemons(offset = 0, limit = 10): Promise<Pokemon[]> {
+    const response = await fetch(
+      `${POKEMON_ENDPOINT}?offset=${offset}&limit=${limit}`
+    );
     if (!response.ok) throw new Error('Something went wrong');
     const data = await response.json();
 

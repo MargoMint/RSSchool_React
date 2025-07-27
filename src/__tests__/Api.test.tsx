@@ -1,5 +1,5 @@
 import Api from '../utils/Api';
-import { POKEMON_ENDPOINT, POKEMON_LIST_QUERY } from '../constants/api';
+import { POKEMON_ENDPOINT } from '../constants/api';
 
 global.fetch = jest.fn();
 
@@ -95,7 +95,7 @@ describe('Api class', () => {
       const result = await api.getAllPokemons();
 
       expect(fetch).toHaveBeenCalledWith(
-        `${POKEMON_ENDPOINT}/${POKEMON_LIST_QUERY}`
+        `${POKEMON_ENDPOINT}?offset=0&limit=10`
       );
       expect(result).toEqual([
         {

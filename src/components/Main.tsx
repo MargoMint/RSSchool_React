@@ -1,12 +1,13 @@
-import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import Layout from './Layout';
 import Search from './Search';
 import Api from '../utils/Api';
 import ErrorBoundary from './ErrorBoundary';
 import ResultsArea from './ResultsArea';
 import type { Pokemon } from '../types/Pokemon';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import useLocalStorage from '../hooks/LocalStorageHook';
+import Button from './Button';
 
 function Main() {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,42 +15,42 @@ function Main() {
   const [results, setResults] = useState<Pokemon[]>([]);
   const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
   const api = useMemo(() => new Api(), []);
-  const requestCompleted = useRef(false);
 
-  const fetchData = useCallback(
-    (term: string) => {
-      setIsLoading(true);
-      setError(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = Number(searchParams.get('page')) || 1;
+  const limit = 10;
+  const offset = (currentPage - 1) * limit;
 
-      const trimmedQuery = term.trim();
-      const dataPromise = trimmedQuery
-        ? api.getPokemon(trimmedQuery)
-        : api.getAllPokemons();
+  const fetchData = useCallback(() => {
+    setIsLoading(true);
+    setError(null);
 
-      dataPromise
-        .then((data) => {
-          setResults(data);
-        })
-        .catch((err) => {
-          setError(err.message);
-          setResults([]);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    },
-    [api]
-  );
+    const trimmedQuery = searchTerm.trim();
+    const dataPromise = trimmedQuery
+      ? api.getPokemon(trimmedQuery)
+      : api.getAllPokemons(offset, limit);
+
+    dataPromise
+      .then((data) => {
+        setResults(data);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setResults([]);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [api, searchTerm, offset, limit]);
 
   useEffect(() => {
-    if (requestCompleted.current) return;
-    requestCompleted.current = true;
-    fetchData(searchTerm);
-  }, [fetchData, searchTerm]);
+    fetchData();
+  }, [fetchData]);
 
   const onSearch = (term: string) => {
-    setSearchTerm(term);
-    fetchData(term);
+    const trimmedQuery = term.trim();
+    setSearchTerm(trimmedQuery);
+    setSearchParams({ page: '1' });
   };
 
   return (
@@ -60,10 +61,31 @@ function Main() {
           <p className="text-red-700 font-medium hover:underline">About Page</p>
         </Link>
       </div>
+
       <Search onSearch={onSearch} />
+
       <ErrorBoundary>
         <ResultsArea isLoading={isLoading} error={error} results={results} />
       </ErrorBoundary>
+
+      {!searchTerm && (
+        <div className="flex justify-center gap-4 my-6">
+          <Button
+            title="Prev"
+            variant="outline"
+            onClick={() => {
+              if (currentPage > 1) {
+                setSearchParams({ page: String(currentPage - 1) });
+              }
+            }}
+          />
+          <Button
+            title="Next"
+            variant="primary"
+            onClick={() => setSearchParams({ page: String(currentPage + 1) })}
+          />
+        </div>
+      )}
     </Layout>
   );
 }
