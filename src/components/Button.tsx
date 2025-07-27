@@ -5,7 +5,7 @@ interface ButtonProps {
 }
 
 function Button({ onClick, title, variant }: ButtonProps) {
-  const baseClasses = 'rounded-md px-4 py-2 font-medium hover:cursor-pointer';
+  const baseClasses = 'rounded-lg px-4 py-2 font-medium hover:cursor-pointer';
 
   const variantClasses = {
     primary: 'bg-red-800 text-white',
