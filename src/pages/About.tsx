@@ -1,4 +1,3 @@
-import Header from '../components/Header';
 import Layout from '../components/Layout';
 import Button from '../components/Button';
 import { Link } from 'react-router-dom';
@@ -6,7 +5,6 @@ import { Link } from 'react-router-dom';
 function AboutPage() {
   return (
     <Layout>
-      <Header />
       <div className="text-center space-y-4">
         <h2 className="text-xl font-extrabold text-red-800 uppercase mt-2">
           About the App Page
