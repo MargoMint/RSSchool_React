@@ -1,69 +1,86 @@
-# React + TypeScript + Vite
+# PokeSearch
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A fun and educational Pokemon search app built with modern React and TypeScript.
 
-Currently, two official plugins are available:
+<div align="left">
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black" />
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" />
+  <img src="https://img.shields.io/badge/TailwindCSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" />
+  <img src="https://img.shields.io/badge/React Router-DD0031?style=for-the-badge&logo=react-router&logoColor=white" />
+  <img src="https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white" />
+  <img src="https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white" />
+  <img src="https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=prettier&logoColor=black" />
+  <img src="https://img.shields.io/badge/Husky-000000?style=for-the-badge&logo=git&logoColor=white" />
+</div>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🎯 What is PokeSearch?
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+**PokeSearch** is a single-page application (SPA) where you can search for your favorite Pokemon and view details about them. It was created as a learning project during the [RS School React Course](https://rs.school/courses/reactjs).
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## ⚙️ Technologies Used
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+### 🧩 Core
+
+- **React + TypeScript** – For building a modern and reliable component-based UI.
+- **Vite** – Lightning-fast build tool and dev server.
+- **React Router v6** – Declarative SPA routing with nested routes and outlet-based composition.
+- **Tailwind CSS** – Utility-first styling with responsive design.
+
+### ✅ Testing
+
+- **Jest** – Powerful and fast test runner.
+- **React Testing Library** – Testing UI the way users interact with it.
+
+### 🧹 Code Quality
+
+- **ESLint** – Linting for consistent and error-free code.
+- **Prettier** – Automatic code formatting.
+- **Husky + lint-staged** – Run lint and format checks before each commit.
+
+---
+
+## 🚀 How to Run Locally
+
+```bash
+git clone https://github.com/MargoMint/RSSchool_React.git
+cd RSSchool_React
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+## 🧪 Scripts
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+```bash
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build locally
+npm run preview
+
+# Run unit tests
+npm run test
+
+# Run tests with coverage report
+npm run test:coverage
+
+# Lint all files
+npm run lint
+
+# Lint and fix issues
+npm run lint:fix
+
+# Format all files
+npm run format:fix
+
+
 ```
