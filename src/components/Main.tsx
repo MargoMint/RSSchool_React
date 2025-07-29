@@ -39,7 +39,11 @@ function Main() {
 
     dataPromise
       .then((data) => {
-        setResults(data);
+        if (!Array.isArray(data)) {
+          setResults([data]);
+        } else {
+          setResults(data);
+        }
       })
       .catch((err) => {
         setError(err.message);

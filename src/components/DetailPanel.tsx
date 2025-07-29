@@ -21,7 +21,7 @@ function DetailPanel() {
     if (selectedItem) {
       api
         .getPokemon(selectedItem, mapPokemon)
-        .then((data) => setLoadedPokemon(data[0]))
+        .then((data) => setLoadedPokemon(data))
         .catch(() => {
           setLoadedPokemon(null);
           setError('Failed to load Pokemon details');

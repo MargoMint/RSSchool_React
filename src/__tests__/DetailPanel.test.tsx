@@ -59,7 +59,7 @@ describe('DetailPanel', () => {
   });
 
   test('should render full UI of pokemon after fetch', async () => {
-    mockGetPokemon.mockResolvedValue([mockPokemon]);
+    mockGetPokemon.mockResolvedValue(mockPokemon);
 
     render(<DetailPanel />);
 
@@ -94,7 +94,7 @@ describe('DetailPanel', () => {
   });
 
   test('should close the panel when Close button is clicked', async () => {
-    mockGetPokemon.mockResolvedValue([mockPokemon]);
+    mockGetPokemon.mockResolvedValue(mockPokemon);
 
     render(<DetailPanel />);
 

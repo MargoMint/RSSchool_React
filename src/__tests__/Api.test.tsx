@@ -36,17 +36,15 @@ describe('Api class', () => {
       const result = await api.getPokemon('bulbasaur', mapPokemon);
 
       expect(fetch).toHaveBeenCalledWith(`${POKEMON_ENDPOINT}/bulbasaur`);
-      expect(result).toEqual([
-        {
-          id: 1,
-          name: 'bulbasaur',
-          height: 7,
-          weight: 69,
-          types: ['grass', 'poison'],
-          description: 'overgrow, chlorophyll',
-          image: 'https://example.com/bulbasaur.png',
-        },
-      ]);
+      expect(result).toEqual({
+        id: 1,
+        name: 'bulbasaur',
+        height: 7,
+        weight: 69,
+        types: ['grass', 'poison'],
+        description: 'overgrow, chlorophyll',
+        image: 'https://example.com/bulbasaur.png',
+      });
     });
 
     test('should throw error when pokemon not found', async () => {

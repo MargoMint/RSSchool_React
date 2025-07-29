@@ -1,14 +1,11 @@
 import { POKEMON_ENDPOINT } from '../constants/api';
 
 class Api {
-  async getPokemon<T>(
-    name: string,
-    dataMap: (data: unknown) => T
-  ): Promise<T[]> {
+  async getPokemon<T>(name: string, dataMap: (data: unknown) => T): Promise<T> {
     const response = await fetch(`${POKEMON_ENDPOINT}/${name.toLowerCase()}`);
     if (!response.ok) throw new Error('Something went wrong');
     const data = await response.json();
-    return [dataMap(data)];
+    return dataMap(data);
   }
 
   async getAllPokemons<T>(
