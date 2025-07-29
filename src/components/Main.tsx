@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import Layout from './Layout';
 import Search from './Search';
-import Api from '../utils/Api';
+import Api from '../api/Api';
 import ErrorBoundary from './ErrorBoundary';
 import ResultsArea from './ResultsArea';
 import type { Pokemon } from '../types/Pokemon';
@@ -9,6 +9,7 @@ import { Link, useSearchParams, Outlet } from 'react-router-dom';
 import useLocalStorage from '../hooks/useLocalStorage';
 import Button from './Button';
 import getValidPage from '../utils/getValidPage';
+import { mapPokemon } from '../utils/mapPokemon';
 
 function Main() {
   const [isLoading, setIsLoading] = useState(false);
@@ -33,8 +34,8 @@ function Main() {
 
     const trimmedQuery = searchTerm.trim();
     const dataPromise = trimmedQuery
-      ? api.getPokemon(trimmedQuery)
-      : api.getAllPokemons(offset, limit);
+      ? api.getPokemon(trimmedQuery, mapPokemon)
+      : api.getAllPokemons(offset, limit, mapPokemon);
 
     dataPromise
       .then((data) => {

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useOutletContext } from 'react-router-dom';
-import Api from '../utils/Api';
+import Api from '../api/Api';
 import type { Pokemon } from '../types/Pokemon';
 import Button from './Button';
 import InfoMessage from './InfoMessage';
+import { mapPokemon } from '../utils/mapPokemon';
 
 function DetailPanel() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -19,7 +20,7 @@ function DetailPanel() {
 
     if (selectedItem) {
       api
-        .getPokemon(selectedItem)
+        .getPokemon(selectedItem, mapPokemon)
         .then((data) => setLoadedPokemon(data[0]))
         .catch(() => {
           setLoadedPokemon(null);
