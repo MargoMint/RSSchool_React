@@ -8,6 +8,7 @@ import type { Pokemon } from '../types/Pokemon';
 import { Link, useSearchParams, Outlet } from 'react-router-dom';
 import useLocalStorage from '../hooks/LocalStorageHook';
 import Button from './Button';
+import getValidPage from '../utils/getValidPage';
 
 function Main() {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,7 +18,7 @@ function Main() {
   const api = useMemo(() => new Api(), []);
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const currentPage = Number(searchParams.get('page')) || 1;
+  const currentPage = getValidPage(searchParams);
   const limit = 10;
   const offset = (currentPage - 1) * limit;
 
@@ -87,7 +88,7 @@ function Main() {
                 variant="outline"
                 onClick={() => {
                   if (currentPage > 1) {
-                    setSearchParams({ page: String(currentPage - 1) });
+                    setSearchParams({ page: (currentPage - 1).toString() });
                   }
                 }}
               />
@@ -95,14 +96,14 @@ function Main() {
                 title="Next"
                 variant="primary"
                 onClick={() =>
-                  setSearchParams({ page: String(currentPage + 1) })
+                  setSearchParams({ page: (currentPage + 1).toString() })
                 }
               />
             </div>
           )}
         </div>
 
-        <Outlet />
+        <Outlet context={{ api }} />
       </div>
     </Layout>
   );
