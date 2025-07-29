@@ -1,19 +1,14 @@
 import DetailPanel from '../components/DetailPanel';
-import Api from '../utils/Api';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useSearchParams } from 'react-router-dom';
 import type { Pokemon } from '../types/Pokemon';
+import { useSearchParams, useOutletContext } from 'react-router-dom';
 
 jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   useSearchParams: jest.fn(),
+  useOutletContext: jest.fn(),
 }));
-
-jest.mock('../utils/Api', () => {
-  return jest.fn().mockImplementation(() => ({
-    getPokemon: jest.fn(),
-  }));
-});
 
 describe('DetailPanel', () => {
   const mockPokemon: Pokemon = {
@@ -36,16 +31,17 @@ describe('DetailPanel', () => {
     ]);
 
     mockGetPokemon = jest.fn();
-    (Api as jest.Mock).mockImplementation(() => ({
-      getPokemon: mockGetPokemon,
-    }));
+
+    (useOutletContext as jest.Mock).mockReturnValue({
+      api: { getPokemon: mockGetPokemon },
+    });
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should not render when no selectedItem', () => {
+  test('should not render when no selectedItem', () => {
     (useSearchParams as jest.Mock).mockReturnValue([
       new URLSearchParams(''),
       mockSetSearchParams,
@@ -55,14 +51,14 @@ describe('DetailPanel', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('should render loading state with spinner text', () => {
+  test('should render loading state with spinner text', () => {
     mockGetPokemon.mockImplementation(() => new Promise(() => {}));
 
     render(<DetailPanel />);
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.getByText(/loading/i)).toBeInTheDocument();
   });
 
-  it('should render full UI of pokemon after fetch', async () => {
+  test('should render full UI of pokemon after fetch', async () => {
     mockGetPokemon.mockResolvedValue([mockPokemon]);
 
     render(<DetailPanel />);
@@ -71,24 +67,23 @@ describe('DetailPanel', () => {
       expect(
         screen.getByRole('heading', { name: /bulbasaur/i })
       ).toBeInTheDocument();
-      expect(screen.getByAltText('bulbasaur')).toHaveAttribute(
-        'src',
-        mockPokemon.image
-      );
-      expect(screen.getByText(/height/i)).toBeInTheDocument();
-      expect(screen.getByText(String(mockPokemon.height))).toBeInTheDocument();
-      expect(screen.getByText(/weight/i)).toBeInTheDocument();
-      expect(screen.getByText(String(mockPokemon.weight))).toBeInTheDocument();
-      expect(screen.getByText(/types/i)).toBeInTheDocument();
-      expect(
-        screen.getByText(mockPokemon.types.join(', '))
-      ).toBeInTheDocument();
-      expect(screen.getByText(/abilities/i)).toBeInTheDocument();
-      expect(screen.getByText(mockPokemon.description)).toBeInTheDocument();
     });
+
+    expect(screen.getByAltText('bulbasaur')).toHaveAttribute(
+      'src',
+      mockPokemon.image
+    );
+    expect(screen.getByText(/height/i)).toBeInTheDocument();
+    expect(screen.getByText(String(mockPokemon.height))).toBeInTheDocument();
+    expect(screen.getByText(/weight/i)).toBeInTheDocument();
+    expect(screen.getByText(String(mockPokemon.weight))).toBeInTheDocument();
+    expect(screen.getByText(/types/i)).toBeInTheDocument();
+    expect(screen.getByText(mockPokemon.types.join(', '))).toBeInTheDocument();
+    expect(screen.getByText(/abilities/i)).toBeInTheDocument();
+    expect(screen.getByText(mockPokemon.description)).toBeInTheDocument();
   });
 
-  it('should handle API errors gracefully', async () => {
+  test('should handle API errors gracefully', async () => {
     mockGetPokemon.mockRejectedValue(new Error('API Error'));
 
     render(<DetailPanel />);
@@ -98,20 +93,19 @@ describe('DetailPanel', () => {
     });
   });
 
-  it('should close the panel when Close button is clicked', async () => {
+  test('should close the panel when Close button is clicked', async () => {
     mockGetPokemon.mockResolvedValue([mockPokemon]);
 
     render(<DetailPanel />);
 
     await waitFor(() => {
-      expect(screen.getByText('bulbasaur')).toBeInTheDocument();
+      expect(screen.getByText(/bulbasaur/i)).toBeInTheDocument();
     });
 
     const closeButton = screen.getByRole('button', { name: /close/i });
     await userEvent.click(closeButton);
 
     expect(mockSetSearchParams).toHaveBeenCalledTimes(1);
-
     const calledWith = mockSetSearchParams.mock.calls[0][0];
     expect(calledWith).toBeInstanceOf(URLSearchParams);
     expect(calledWith.get('details')).toBeNull();
