@@ -3,8 +3,8 @@ import { useSearchParams, useOutletContext } from 'react-router-dom';
 import Api from '../api/Api';
 import type { Pokemon } from '../types/Pokemon';
 import Button from './Button';
-import InfoMessage from './InfoMessage';
 import { mapPokemon } from '../utils/mapPokemon';
+import StatusMessage from './StatusMessage';
 
 function DetailPanel() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -39,9 +39,7 @@ function DetailPanel() {
       className="w-full md:w-1/3 max-h-[65vh] rounded-lg mt-4 p-4 bg-red-800 border border-gray-300 flex flex-col"
       data-testid="detail-panel"
     >
-      {isLoading && <InfoMessage message="Loading.." />}
-
-      {error && <InfoMessage message={error} />}
+      <StatusMessage isLoading={isLoading} error={error} />
 
       {loadedPokemon && (
         <div className="flex flex-col gap-6 flex-grow text-white">
