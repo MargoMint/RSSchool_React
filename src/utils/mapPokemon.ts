@@ -1,35 +1,9 @@
 import type { Pokemon } from '../types/Pokemon';
 import { formatAbilities } from './formatAbilities';
+import isValidRawPokemon from './validateRawPokemon';
 
-interface RawPokemon {
-  id: number;
-  name: string;
-  height: number;
-  weight: number;
-  types: {
-    type: {
-      name: string;
-    };
-  }[];
-  abilities: {
-    ability: {
-      name: string;
-    };
-  }[];
-  sprites: {
-    front_default: string;
-  };
-}
-
-export function mapPokemon(data: RawPokemon): Pokemon {
-  if (
-    typeof data.id !== 'number' ||
-    typeof data.name !== 'string' ||
-    !Array.isArray(data.abilities) ||
-    !data.abilities.every(
-      (item) => item && item.ability && typeof item.ability.name === 'string'
-    )
-  ) {
+export function mapPokemon(data: unknown): Pokemon {
+  if (!isValidRawPokemon(data)) {
     throw new Error('Invalid Pokemon data');
   }
 
