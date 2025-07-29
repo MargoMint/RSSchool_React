@@ -5,11 +5,8 @@ function useLocalStorage(
   initialValue: string
 ): [string, (val: string) => void] {
   const [value, setValue] = useState(() => {
-    try {
-      return localStorage.getItem(key) ?? initialValue;
-    } catch {
-      return initialValue;
-    }
+    const item = localStorage.getItem(key);
+    return item !== null ? item : initialValue;
   });
 
   const updateValue = (newValue: string) => {

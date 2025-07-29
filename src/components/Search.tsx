@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Button from './Button';
-import useLocalStorage from '../hooks/LocalStorageHook';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 interface SearchProps {
   onSearch: (term: string) => void;

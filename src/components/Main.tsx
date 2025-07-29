@@ -6,7 +6,7 @@ import ErrorBoundary from './ErrorBoundary';
 import ResultsArea from './ResultsArea';
 import type { Pokemon } from '../types/Pokemon';
 import { Link, useSearchParams, Outlet } from 'react-router-dom';
-import useLocalStorage from '../hooks/LocalStorageHook';
+import useLocalStorage from '../hooks/useLocalStorage';
 import Button from './Button';
 import getValidPage from '../utils/getValidPage';
 
