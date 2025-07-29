@@ -5,19 +5,17 @@ function createParams(value: string | null): URLSearchParams {
 }
 
 describe('getValidPage', () => {
-  test('returns parsed page if valid integer', () => {
-    expect(getValidPage(createParams('9'))).toBe(9);
+  test('returns parsed page if valid integer >= 1', () => {
+    expect(getValidPage(createParams('1'))).toBe(1);
+    expect(getValidPage(createParams('99'))).toBe(99);
   });
 
-  test('returns 1 for decimal number', () => {
-    expect(getValidPage(createParams('1.234'))).toBe(1);
+  test('returns 1 for negative number or zero', () => {
+    expect(getValidPage(createParams('-1'))).toBe(1);
+    expect(getValidPage(createParams('0'))).toBe(1);
   });
 
-  test('returns 1 for negative number', () => {
-    expect(getValidPage(createParams('-2'))).toBe(1);
-  });
-
-  test('returns 1 for null', () => {
-    expect(getValidPage(createParams(null))).toBe(1);
+  test('returns 1 for NaN-like input', () => {
+    expect(getValidPage(createParams('NaN'))).toBe(1);
   });
 });

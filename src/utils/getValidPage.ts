@@ -1,6 +1,6 @@
 function getValidPage(searchParams: URLSearchParams): number {
-  const page = searchParams.get('page');
-  return page && /^\d+$/.test(page) ? parseInt(page, 10) : 1;
+  const page = +(searchParams.get('page') || '');
+  return isNaN(page) || page < 1 ? 1 : page;
 }
 
 export default getValidPage;
