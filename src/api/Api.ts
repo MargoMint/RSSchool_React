@@ -1,17 +1,17 @@
 import { POKEMON_ENDPOINT } from '../constants/api';
 
 class Api {
-  async getPokemon<T>(name: string, dataMap: (data: unknown) => T): Promise<T> {
+  async getPokemon<T>(name: string, mapData: (data: unknown) => T): Promise<T> {
     const response = await fetch(`${POKEMON_ENDPOINT}/${name.toLowerCase()}`);
     if (!response.ok) throw new Error('Something went wrong');
     const data = await response.json();
-    return dataMap(data);
+    return mapData(data);
   }
 
   async getAllPokemons<T>(
     offset = 0,
     limit = 10,
-    dataMap: (data: unknown) => T
+    mapData: (data: unknown) => T
   ): Promise<T[]> {
     const response = await fetch(
       `${POKEMON_ENDPOINT}?offset=${offset}&limit=${limit}`
@@ -23,7 +23,7 @@ class Api {
       data.results.map(async (item: { name: string; url: string }) => {
         const res = await fetch(item.url);
         const info = await res.json();
-        return dataMap(info);
+        return mapData(info);
       })
     );
     return detailedData;
