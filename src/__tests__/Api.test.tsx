@@ -1,4 +1,5 @@
-import Api from '../utils/Api';
+import Api from '../api/Api';
+import { mapPokemon } from '../utils/mapPokemon';
 import { POKEMON_ENDPOINT } from '../constants/api';
 
 global.fetch = jest.fn();
@@ -32,26 +33,24 @@ describe('Api class', () => {
         json: async () => mockResponse,
       });
 
-      const result = await api.getPokemon('bulbasaur');
+      const result = await api.getPokemon('bulbasaur', mapPokemon);
 
       expect(fetch).toHaveBeenCalledWith(`${POKEMON_ENDPOINT}/bulbasaur`);
-      expect(result).toEqual([
-        {
-          id: 1,
-          name: 'bulbasaur',
-          height: 7,
-          weight: 69,
-          types: ['grass', 'poison'],
-          description: 'overgrow, chlorophyll',
-          image: 'https://example.com/bulbasaur.png',
-        },
-      ]);
+      expect(result).toEqual({
+        id: 1,
+        name: 'bulbasaur',
+        height: 7,
+        weight: 69,
+        types: ['grass', 'poison'],
+        description: 'overgrow, chlorophyll',
+        image: 'https://example.com/bulbasaur.png',
+      });
     });
 
     test('should throw error when pokemon not found', async () => {
       (fetch as jest.Mock).mockResolvedValueOnce({ ok: false });
 
-      await expect(api.getPokemon('unknown')).rejects.toThrow(
+      await expect(api.getPokemon('unknown', mapPokemon)).rejects.toThrow(
         'Something went wrong'
       );
     });
@@ -66,13 +65,12 @@ describe('Api class', () => {
         sprites: {
           front_default: 'https://example.com/bulbasaur.png',
         },
-        // abilities отсутствуют
       };
       (fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         json: async () => malformedResponse,
       });
-      await expect(api.getPokemon('bulbasaur')).rejects.toThrow();
+      await expect(api.getPokemon('bulbasaur', mapPokemon)).rejects.toThrow();
     });
 
     test('should throw if ability.name is missing', async () => {
@@ -91,7 +89,7 @@ describe('Api class', () => {
         ok: true,
         json: async () => invalidResponse,
       });
-      await expect(api.getPokemon('bulbasaur')).rejects.toThrow();
+      await expect(api.getPokemon('bulbasaur', mapPokemon)).rejects.toThrow();
     });
 
     test('should throw if id is not a number', async () => {
@@ -110,7 +108,7 @@ describe('Api class', () => {
         ok: true,
         json: async () => invalidResponse,
       });
-      await expect(api.getPokemon('bulbasaur')).rejects.toThrow();
+      await expect(api.getPokemon('bulbasaur', mapPokemon)).rejects.toThrow();
     });
   });
 
@@ -159,7 +157,7 @@ describe('Api class', () => {
           json: async () => detailResponses[1],
         });
 
-      const result = await api.getAllPokemons();
+      const result = await api.getAllPokemons(0, 10, mapPokemon);
 
       expect(fetch).toHaveBeenCalledWith(
         `${POKEMON_ENDPOINT}?offset=0&limit=10`
@@ -188,7 +186,7 @@ describe('Api class', () => {
 
     test('should throw error when failed to fetch pokemon list', async () => {
       (fetch as jest.Mock).mockResolvedValueOnce({ ok: false });
-      await expect(api.getAllPokemons()).rejects.toThrow(
+      await expect(api.getAllPokemons(0, 10, mapPokemon)).rejects.toThrow(
         'Something went wrong'
       );
     });
@@ -201,7 +199,7 @@ describe('Api class', () => {
         ok: true,
         json: async () => malformedListResponse,
       });
-      await expect(api.getAllPokemons()).rejects.toThrow();
+      await expect(api.getAllPokemons(0, 10, mapPokemon)).rejects.toThrow();
     });
   });
 });

@@ -1,13 +1,7 @@
-import Header from './components/Header';
-import { Outlet } from 'react-router-dom';
+import AppRouter from './AppRouter';
 
 function App() {
-  return (
-    <>
-      <Header />
-      <Outlet />
-    </>
-  );
+  return <AppRouter />;
 }
 
 export default App;

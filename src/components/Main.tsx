@@ -1,13 +1,15 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import Layout from './Layout';
 import Search from './Search';
-import Api from '../utils/Api';
+import Api from '../api/Api';
 import ErrorBoundary from './ErrorBoundary';
 import ResultsArea from './ResultsArea';
 import type { Pokemon } from '../types/Pokemon';
 import { Link, useSearchParams, Outlet } from 'react-router-dom';
-import useLocalStorage from '../hooks/LocalStorageHook';
+import useLocalStorage from '../hooks/useLocalStorage';
 import Button from './Button';
+import getValidPage from '../utils/getValidPage';
+import { mapPokemon } from '../utils/mapPokemon';
 
 function Main() {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,7 +19,7 @@ function Main() {
   const api = useMemo(() => new Api(), []);
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const currentPage = Number(searchParams.get('page')) || 1;
+  const currentPage = getValidPage(searchParams);
   const limit = 10;
   const offset = (currentPage - 1) * limit;
 
@@ -32,12 +34,16 @@ function Main() {
 
     const trimmedQuery = searchTerm.trim();
     const dataPromise = trimmedQuery
-      ? api.getPokemon(trimmedQuery)
-      : api.getAllPokemons(offset, limit);
+      ? api.getPokemon(trimmedQuery, mapPokemon)
+      : api.getAllPokemons(offset, limit, mapPokemon);
 
     dataPromise
       .then((data) => {
-        setResults(data);
+        if (!Array.isArray(data)) {
+          setResults([data]);
+        } else {
+          setResults(data);
+        }
       })
       .catch((err) => {
         setError(err.message);
@@ -87,7 +93,7 @@ function Main() {
                 variant="outline"
                 onClick={() => {
                   if (currentPage > 1) {
-                    setSearchParams({ page: String(currentPage - 1) });
+                    setSearchParams({ page: (currentPage - 1).toString() });
                   }
                 }}
               />
@@ -95,14 +101,14 @@ function Main() {
                 title="Next"
                 variant="primary"
                 onClick={() =>
-                  setSearchParams({ page: String(currentPage + 1) })
+                  setSearchParams({ page: (currentPage + 1).toString() })
                 }
               />
             </div>
           )}
         </div>
 
-        <Outlet />
+        <Outlet context={{ api }} />
       </div>
     </Layout>
   );

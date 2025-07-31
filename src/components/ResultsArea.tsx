@@ -1,4 +1,5 @@
 import CardList from './CardList';
+import StatusMessage from './StatusMessage';
 import type { MainState } from '../types/MainState';
 
 interface ResultsAreaProps extends MainState {
@@ -11,11 +12,10 @@ function ResultsArea({
   results,
   onCardClick,
 }: ResultsAreaProps) {
-  if (isLoading) {
-    return <p className="text-center text-red-800">Loading...</p>;
-  }
-  if (error) {
-    return <p className="text-center text-red-800">{error}</p>;
+  const showStatus = isLoading || error;
+
+  if (showStatus) {
+    return <StatusMessage isLoading={isLoading} error={error} />;
   }
 
   return <CardList cardItems={results} onCardClick={onCardClick} />;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, type PropsWithChildren } from 'react';
 import Button from './Button';
 
 export interface ErrorBoundaryState {
@@ -6,13 +6,15 @@ export interface ErrorBoundaryState {
   error?: Error;
 }
 
-export interface Props {
-  children: React.ReactNode;
+export interface ErrorBoundaryProps {
   onReset?: () => void;
 }
 
-class ErrorBoundary extends Component<Props, ErrorBoundaryState> {
-  constructor(props: Props) {
+class ErrorBoundary extends Component<
+  PropsWithChildren<ErrorBoundaryProps>,
+  ErrorBoundaryState
+> {
+  constructor(props: PropsWithChildren<ErrorBoundaryProps>) {
     super(props);
     this.state = { hasError: false, error: undefined };
   }
