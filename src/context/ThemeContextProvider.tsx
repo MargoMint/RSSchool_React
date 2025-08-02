@@ -7,11 +7,11 @@ function ThemeContextProvider({ children }: PropsWithChildren) {
   const [theme, setTheme] = useLocalStorage<'light' | 'dark'>('theme', 'light');
 
   useEffect(() => {
-    const root = window.document.documentElement;
+    const html = document.documentElement;
     if (theme === 'dark') {
-      root.classList.add('dark');
+      html.classList.add('dark');
     } else {
-      root.classList.remove('dark');
+      html.classList.remove('dark');
     }
   }, [theme]);
 
