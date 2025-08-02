@@ -44,7 +44,7 @@ describe('Main', () => {
   });
 
   test('uses the searchTerm from localStorage when loading', async () => {
-    localStorage.setItem('searchTerm', 'bulbasaur');
+    localStorage.setItem('searchTerm', JSON.stringify('bulbasaur'));
     mockGetPokemon.mockResolvedValueOnce([
       { name: 'bulbasaur', description: 'Abilities: overgrow, chlorophyll' },
     ]);
@@ -120,7 +120,9 @@ describe('Main', () => {
     const userActions = userEvent.setup();
     await userActions.type(screen.getByRole('textbox'), 'bulbasaur');
     await userActions.click(screen.getByRole('button', { name: /search/i }));
-    expect(localStorage.getItem('searchTerm')).toBe('bulbasaur');
+    expect(localStorage.getItem('searchTerm')).toBe(
+      JSON.stringify('bulbasaur')
+    );
     expect(mockGetPokemon).toHaveBeenCalledWith('bulbasaur', mapPokemon);
     await waitFor(() =>
       expect(screen.getByText('bulbasaur')).toBeInTheDocument()

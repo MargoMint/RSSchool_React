@@ -18,6 +18,9 @@ const config: Config = {
       lines: 50,
     },
   },
+  moduleNameMapper: {
+    '\\.(jpg|jpeg|png|gif|svg)$': '<rootDir>/__mocks__/fileMock.ts',
+  },
 };
 
 export default config;

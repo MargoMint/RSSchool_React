@@ -36,20 +36,20 @@ function DetailPanel() {
 
   return (
     <div
-      className="w-full md:w-1/3 max-h-[65vh] rounded-lg mt-4 p-4 bg-red-800 border border-gray-300 flex flex-col"
+      className="w-full md:w-1/3 max-h-[65vh] rounded-lg mt-4 p-4 bg-red-800 border border-gray-300 flex flex-col dark:border-none"
       data-testid="detail-panel"
     >
       <StatusMessage isLoading={isLoading} error={error} />
 
       {loadedPokemon && (
-        <div className="flex flex-col gap-6 flex-grow text-white">
+        <div className="flex flex-col gap-6 flex-grow text-white dark:text-[#1b1b1b]">
           <img
             src={loadedPokemon.image}
             alt={loadedPokemon.name}
             className="w-32 h-32 object-contain mx-auto"
           />
 
-          <h2 className="text-3xl font-extrabold text-center uppercase border-b pb-2">
+          <h2 className="text-3xl font-extrabold text-center uppercase border-b pb-2 dark:border-b-[#1b1b1b]">
             {loadedPokemon.name}
           </h2>
 
@@ -83,7 +83,7 @@ function DetailPanel() {
             setSearchParams(searchParams);
           }}
           title="Close"
-          variant="outline"
+          variant="modal"
         />
       </div>
     </div>

@@ -12,9 +12,7 @@ function Card({ name, description, onCardClick }: CardProps) {
       onClick={() => onCardClick(name)}
     >
       <p className="text-xl font-bold uppercase text-red-800">{name}</p>
-      <p className="text-gray-700">
-        {description ? `Abilities: ${description}` : null}
-      </p>
+      <p>{description ? `Abilities: ${description}` : null}</p>
     </div>
   );
 }

@@ -16,7 +16,7 @@ describe('Search', () => {
   });
 
   test('displays previously saved search term from localStorage on mount', () => {
-    localStorage.setItem('searchTerm', 'bulbasaur');
+    localStorage.setItem('searchTerm', JSON.stringify('bulbasaur'));
     render(<Search onSearch={mockOnSearch} />);
     expect(screen.getByRole('textbox')).toHaveValue('bulbasaur');
   });
@@ -31,7 +31,9 @@ describe('Search', () => {
     await userActions.click(searchButton);
 
     expect(mockOnSearch).toHaveBeenCalledWith('bulbasaur');
-    expect(localStorage.getItem('searchTerm')).toBe('bulbasaur');
+    expect(localStorage.getItem('searchTerm')).toBe(
+      JSON.stringify('bulbasaur')
+    );
   });
 
   test('triggers a search when pressing Enter', async () => {
@@ -43,7 +45,9 @@ describe('Search', () => {
     await userActions.keyboard('{Enter}');
 
     expect(mockOnSearch).toHaveBeenCalledWith('bulbasaur');
-    expect(localStorage.getItem('searchTerm')).toBe('bulbasaur');
+    expect(localStorage.getItem('searchTerm')).toBe(
+      JSON.stringify('bulbasaur')
+    );
   });
 
   test('updates input value when user types', async () => {
