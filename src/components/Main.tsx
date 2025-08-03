@@ -10,6 +10,7 @@ import useLocalStorage from '../hooks/useLocalStorage';
 import Button from './Button';
 import getValidPage from '../utils/getValidPage';
 import { mapPokemon } from '../utils/mapPokemon';
+import Flyout from './Flyout';
 
 function Main() {
   const [isLoading, setIsLoading] = useState(false);
@@ -75,7 +76,7 @@ function Main() {
 
       <Search onSearch={onSearch} />
 
-      <div className="flex flex-col md:flex-row">
+      <div className="flex flex-col md:flex-row mb-14">
         <div className="md:w-2/3">
           <ErrorBoundary>
             <ResultsArea
@@ -110,6 +111,7 @@ function Main() {
 
         <Outlet context={{ api }} />
       </div>
+      <Flyout />
     </Layout>
   );
 }

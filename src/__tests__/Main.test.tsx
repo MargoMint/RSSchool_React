@@ -1,10 +1,11 @@
 import Main from '../components/Main';
 import Api from '../api/Api';
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { setupLocalStorageMock } from '../test-utils/clearMock';
 import { MemoryRouter } from 'react-router-dom';
 import { mapPokemon } from '../utils/mapPokemon';
+import renderDataWithProvider from '../test-utils/renderDataWithProvider';
 
 jest.mock('../api/Api');
 
@@ -31,7 +32,7 @@ describe('Main', () => {
     mockGetAllPokemons.mockResolvedValueOnce([
       { name: 'bulbasaur', description: 'Abilities: overgrow, chlorophyll' },
     ]);
-    render(
+    renderDataWithProvider(
       <MemoryRouter>
         <Main />
       </MemoryRouter>
@@ -48,7 +49,7 @@ describe('Main', () => {
     mockGetPokemon.mockResolvedValueOnce([
       { name: 'bulbasaur', description: 'Abilities: overgrow, chlorophyll' },
     ]);
-    render(
+    renderDataWithProvider(
       <MemoryRouter>
         <Main />
       </MemoryRouter>
@@ -66,7 +67,7 @@ describe('Main', () => {
       resolveFetch = resolve;
     });
     mockGetAllPokemons.mockReturnValueOnce(promise);
-    render(
+    renderDataWithProvider(
       <MemoryRouter>
         <Main />
       </MemoryRouter>
@@ -85,7 +86,7 @@ describe('Main', () => {
     mockGetAllPokemons.mockResolvedValueOnce([
       { name: 'bulbasaur', description: 'Abilities: overgrow, chlorophyll' },
     ]);
-    render(
+    renderDataWithProvider(
       <MemoryRouter>
         <Main />
       </MemoryRouter>
@@ -97,7 +98,7 @@ describe('Main', () => {
 
   test('displays an error when the API crashes', async () => {
     mockGetAllPokemons.mockRejectedValueOnce(new Error('API Error'));
-    render(
+    renderDataWithProvider(
       <MemoryRouter>
         <Main />
       </MemoryRouter>
@@ -112,7 +113,7 @@ describe('Main', () => {
     mockGetPokemon.mockResolvedValueOnce([
       { name: 'bulbasaur', description: 'Abilities: overgrow, chlorophyll' },
     ]);
-    render(
+    renderDataWithProvider(
       <MemoryRouter>
         <Main />
       </MemoryRouter>

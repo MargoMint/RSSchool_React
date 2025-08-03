@@ -14,7 +14,7 @@ function Button({ onClick, title, variant, children }: ButtonProps) {
       'bg-red-800 text-white dark:text-[#1b1b1b]': variant === 'primary',
       'border-2 border-red-800 text-red-800 bg-transparent dark:border-white dark:text-white':
         variant === 'outline',
-      'bg-white text-red-800 dark:bg-[#1b1b1b] dark:text-red-800':
+      'bg-white text-red-800 border-2 border-red-800 dark:bg-[#1b1b1b] dark:text-red-800':
         variant === 'modal',
       'text-xl bg-transparent': variant === 'icon',
     }

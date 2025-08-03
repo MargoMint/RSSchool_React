@@ -1,6 +1,7 @@
 import CardList from '../components/CardList';
 import type { Pokemon } from '../types/Pokemon';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import renderDataWithProvider from '../test-utils/renderDataWithProvider';
 
 describe('CardList', () => {
   const mockClick = jest.fn();
@@ -27,12 +28,14 @@ describe('CardList', () => {
   ];
 
   test('renders correct number of Card components', () => {
-    render(<CardList cardItems={cardListItems} onCardClick={mockClick} />);
+    renderDataWithProvider(
+      <CardList cardItems={cardListItems} onCardClick={mockClick} />
+    );
     expect(screen.getAllByTestId('card')).toHaveLength(2);
   });
 
   test('renders empty state when no items', () => {
-    render(<CardList cardItems={[]} onCardClick={mockClick} />);
+    renderDataWithProvider(<CardList cardItems={[]} onCardClick={mockClick} />);
     expect(screen.queryAllByTestId('card').length).toBe(0);
   });
 });

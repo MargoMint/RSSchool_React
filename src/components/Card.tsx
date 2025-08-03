@@ -1,18 +1,43 @@
+import { useDispatch, useSelector } from 'react-redux';
+import { togglePokemon } from '../store/selectedSlice';
+import type { Pokemon } from '../types/Pokemon';
+import type { RootState } from '../store/store';
 interface CardProps {
-  name: string;
-  description: string;
+  pokemon: Pokemon;
   onCardClick: (name: string) => void;
 }
 
-function Card({ name, description, onCardClick }: CardProps) {
+function Card({ pokemon, onCardClick }: CardProps) {
+  const dispatch = useDispatch();
+  const selected = useSelector((state: RootState) =>
+    state.selectedPokemon.selected.find((item) => item.id === pokemon.id)
+  );
+
+  const handleCheckboxChange = () => {
+    dispatch(togglePokemon(pokemon));
+  };
+
   return (
-    <div
-      data-testid="card"
-      className="flex items-center justify-between border border-red-300 rounded-lg p-4 shadow"
-      onClick={() => onCardClick(name)}
-    >
-      <p className="text-xl font-bold uppercase text-red-800">{name}</p>
-      <p>{description ? `Abilities: ${description}` : null}</p>
+    <div className="flex items-center gap-4">
+      <input
+        type="checkbox"
+        checked={!!selected}
+        onChange={handleCheckboxChange}
+        className="w-5 h-5 accent-red-800 cursor-pointer"
+      />
+
+      <div
+        data-testid="card"
+        className="flex flex-col flex-grow border border-red-300 rounded-lg p-4 shadow cursor-pointer hover:shadow-md transition"
+        onClick={() => onCardClick(pokemon.name)}
+      >
+        <p className="text-xl font-bold uppercase text-red-800">
+          {pokemon.name}
+        </p>
+        <p>
+          {pokemon.description ? `Abilities: ${pokemon.description}` : null}
+        </p>
+      </div>
     </div>
   );
 }
