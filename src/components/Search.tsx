@@ -1,11 +1,13 @@
 import Button from './Button';
 import useLocalStorage from '../hooks/useLocalStorage';
+import useTheme from '../hooks/useTheme';
 
 interface SearchProps {
   onSearch: (term: string) => void;
 }
 
 function Search({ onSearch }: SearchProps) {
+  const { theme } = useTheme();
   const [savedValue, setSavedValue] = useLocalStorage('searchTerm', '');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +33,11 @@ function Search({ onSearch }: SearchProps) {
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
       />
-      <Button onClick={handleSearch} title="Search" variant="primary" />
+      <Button
+        onClick={handleSearch}
+        title="Search"
+        variant={theme === 'dark' ? 'darkPrimary' : 'primary'}
+      />
     </div>
   );
 }

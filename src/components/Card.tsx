@@ -28,7 +28,7 @@ function Card({ pokemon, onCardClick }: CardProps) {
 
       <div
         data-testid="card"
-        className="flex flex-col flex-grow border border-red-300 rounded-lg p-4 shadow cursor-pointer hover:shadow-md transition"
+        className="flex flex-col flex-grow border border-red-400 rounded-lg p-4 shadow cursor-pointer hover:shadow-md transition"
         onClick={() => onCardClick(pokemon.name)}
       >
         <p className="text-xl font-bold uppercase text-red-800">
