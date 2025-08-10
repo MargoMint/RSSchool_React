@@ -1,4 +1,4 @@
-import { mapPokemon } from '../utils/mapPokemon';
+import mapPokemon from '../utils/mapPokemon';
 
 describe('mapPokemon', () => {
   test('should map raw API response to Pokemon object', () => {

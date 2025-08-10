@@ -2,7 +2,7 @@ import type { Pokemon } from '../types/Pokemon';
 import { formatAbilities } from './formatAbilities';
 import isValidRawPokemon from './validateRawPokemon';
 
-export function mapPokemon(data: unknown): Pokemon {
+function mapPokemon(data: unknown): Pokemon {
   if (!isValidRawPokemon(data)) {
     throw new Error('Invalid Pokemon data');
   }
@@ -17,3 +17,5 @@ export function mapPokemon(data: unknown): Pokemon {
     description: `${formatAbilities(data.abilities)}`,
   };
 }
+
+export default mapPokemon;
