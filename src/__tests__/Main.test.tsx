@@ -16,6 +16,7 @@ setupLocalStorageMock();
 describe('Main', () => {
   const mockPokemonData = {
     name: 'bulbasaur',
+    url: 'https://pokeapi.co/api/v2/pokemon/1/',
     description: 'Abilities: overgrow, chlorophyll',
   };
   let refetchPokemon: jest.Mock;

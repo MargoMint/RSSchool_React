@@ -1,29 +1,27 @@
 import CardList from '../components/CardList';
-import type { Pokemon } from '../types/Pokemon';
+import type { BasicPokemon } from '../types/Pokemon';
 import { screen } from '@testing-library/react';
 import renderDataWithProvider from '../test-utils/renderDataWithProvider';
+
+jest.mock('../api/pokemonApi', () => ({
+  useGetPokemonByUrlQuery: jest.fn(() => ({
+    data: {},
+    isLoading: false,
+    error: null,
+  })),
+}));
 
 describe('CardList', () => {
   const mockClick = jest.fn();
 
-  const cardListItems: Pokemon[] = [
+  const cardListItems: BasicPokemon[] = [
     {
-      id: 1,
       name: 'bulbasaur',
-      description: 'Abilities: overgrow, chlorophyll',
-      image: 'https://example.com/bulbasaur.png',
-      height: 7,
-      weight: 69,
-      types: ['grass', 'poison'],
+      url: 'https://pokeapi.co/api/v2/pokemon/1/',
     },
     {
-      id: 2,
       name: 'ivysaur',
-      description: 'Abilities: overgrow, chlorophyll',
-      image: 'https://example.com/ivysaur.png',
-      height: 10,
-      weight: 130,
-      types: ['grass', 'poison'],
+      url: 'https://pokeapi.co/api/v2/pokemon/2/',
     },
   ];
 

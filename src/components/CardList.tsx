@@ -1,8 +1,8 @@
-import Card from './Card';
-import type { Pokemon } from '../types/Pokemon';
+import CardLoader from './CardLoader';
+import type { BasicPokemon } from '../types/Pokemon';
 
 interface CardListProps {
-  cardItems: Pokemon[];
+  cardItems: BasicPokemon[];
   onCardClick: (name: string) => void;
 }
 
@@ -10,7 +10,7 @@ function CardList({ cardItems, onCardClick }: CardListProps) {
   return (
     <div className="p-4 grid grid-cols-1 gap-2">
       {cardItems.map((item) => (
-        <Card key={item.id} pokemon={item} onCardClick={onCardClick} />
+        <CardLoader key={item.url} url={item.url} onCardClick={onCardClick} />
       ))}
     </div>
   );

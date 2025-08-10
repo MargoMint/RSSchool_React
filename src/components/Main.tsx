@@ -2,7 +2,6 @@ import Layout from './Layout';
 import Search from './Search';
 import ErrorBoundary from './ErrorBoundary';
 import ResultsArea from './ResultsArea';
-import type { Pokemon } from '../types/Pokemon';
 import { Link, useSearchParams, Outlet } from 'react-router-dom';
 import useLocalStorage from '../hooks/useLocalStorage';
 import Button from './Button';
@@ -10,6 +9,8 @@ import getValidPage from '../utils/getValidPage';
 import Flyout from './Flyout';
 import useTheme from '../hooks/useTheme';
 import { useGetPokemonQuery, useGetAllPokemonsQuery } from '../api/pokemonApi';
+import Card from './Card';
+import StatusMessage from './StatusMessage';
 
 function Main() {
   const { theme } = useTheme();
@@ -32,18 +33,7 @@ function Main() {
     isLoading: isAllLoading,
     error: allError,
     refetch: refetchAllPokemons,
-  } = useGetAllPokemonsQuery(
-    { offset, limit },
-    {
-      skip: trimmedQuery !== '',
-    }
-  );
-
-  const results: Pokemon[] = trimmedQuery
-    ? pokemonData
-      ? [pokemonData]
-      : []
-    : allPokemonsData || [];
+  } = useGetAllPokemonsQuery({ offset, limit }, { skip: trimmedQuery !== '' });
 
   const displayError = trimmedQuery ? error : allError;
   const displayLoading = trimmedQuery ? isLoading : isAllLoading;
@@ -86,12 +76,25 @@ function Main() {
       <div className="flex flex-col md:flex-row mb-14">
         <div className="md:w-2/3">
           <ErrorBoundary>
-            <ResultsArea
-              isLoading={displayLoading}
-              error={displayError ? displayError.toString() : null}
-              results={results}
-              onCardClick={handleCardClick}
-            />
+            {trimmedQuery ? (
+              displayLoading || displayError ? (
+                <StatusMessage
+                  isLoading={displayLoading}
+                  error={displayError ? displayError.toString() : null}
+                />
+              ) : pokemonData ? (
+                <div className="p-4 grid grid-cols-1 gap-2">
+                  <Card pokemon={pokemonData} onCardClick={handleCardClick} />
+                </div>
+              ) : null
+            ) : (
+              <ResultsArea
+                isLoading={displayLoading}
+                error={displayError ? displayError.toString() : null}
+                results={allPokemonsData || []}
+                onCardClick={handleCardClick}
+              />
+            )}
           </ErrorBoundary>
 
           {!searchTerm && (
@@ -115,9 +118,9 @@ function Main() {
             </div>
           )}
         </div>
-
         <Outlet />
       </div>
+
       <Flyout />
     </Layout>
   );
