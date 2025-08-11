@@ -1,10 +1,12 @@
 import Main from '../components/Main';
-import Api from '../utils/Api';
+import Api from '../api/Api';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { setupLocalStorageMock } from '../test-utils/clearMock';
+import { MemoryRouter } from 'react-router-dom';
+import { mapPokemon } from '../utils/mapPokemon';
 
-jest.mock('../utils/Api');
+jest.mock('../api/Api');
 
 const mockGetAllPokemons = jest.fn();
 const mockGetPokemon = jest.fn();
@@ -17,14 +19,26 @@ const mockGetPokemon = jest.fn();
 setupLocalStorageMock();
 
 describe('Main', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    (console.error as jest.Mock).mockRestore();
+  });
+
   test('calls getAllPokemons on mount if no searchTerm in localStorage', async () => {
     mockGetAllPokemons.mockResolvedValueOnce([
       { name: 'bulbasaur', description: 'Abilities: overgrow, chlorophyll' },
     ]);
-    render(<Main />);
+    render(
+      <MemoryRouter>
+        <Main />
+      </MemoryRouter>
+    );
     expect(mockGetAllPokemons).toHaveBeenCalled();
     await waitFor(() =>
-      expect(screen.getByText('BULBASAUR')).toBeInTheDocument()
+      expect(screen.getByText('bulbasaur')).toBeInTheDocument()
     );
     expect(screen.queryByText(/Loading/i)).not.toBeInTheDocument();
   });
@@ -34,10 +48,14 @@ describe('Main', () => {
     mockGetPokemon.mockResolvedValueOnce([
       { name: 'bulbasaur', description: 'Abilities: overgrow, chlorophyll' },
     ]);
-    render(<Main />);
-    expect(mockGetPokemon).toHaveBeenCalledWith('bulbasaur');
+    render(
+      <MemoryRouter>
+        <Main />
+      </MemoryRouter>
+    );
+    expect(mockGetPokemon).toHaveBeenCalledWith('bulbasaur', mapPokemon);
     await waitFor(() =>
-      expect(screen.getByText('BULBASAUR')).toBeInTheDocument()
+      expect(screen.getByText('bulbasaur')).toBeInTheDocument()
     );
     expect(screen.queryByText(/Loading/i)).not.toBeInTheDocument();
   });
@@ -48,13 +66,17 @@ describe('Main', () => {
       resolveFetch = resolve;
     });
     mockGetAllPokemons.mockReturnValueOnce(promise);
-    render(<Main />);
+    render(
+      <MemoryRouter>
+        <Main />
+      </MemoryRouter>
+    );
     expect(screen.getByText(/Loading/i)).toBeInTheDocument();
     resolveFetch([
       { name: 'bulbasaur', description: 'Abilities: overgrow, chlorophyll' },
     ]);
     await waitFor(() => {
-      expect(screen.getByText('BULBASAUR')).toBeInTheDocument();
+      expect(screen.getByText('bulbasaur')).toBeInTheDocument();
       expect(screen.queryByText(/Loading/i)).not.toBeInTheDocument();
     });
   });
@@ -63,15 +85,23 @@ describe('Main', () => {
     mockGetAllPokemons.mockResolvedValueOnce([
       { name: 'bulbasaur', description: 'Abilities: overgrow, chlorophyll' },
     ]);
-    render(<Main />);
+    render(
+      <MemoryRouter>
+        <Main />
+      </MemoryRouter>
+    );
     await waitFor(() =>
-      expect(screen.getByText('BULBASAUR')).toBeInTheDocument()
+      expect(screen.getByText('bulbasaur')).toBeInTheDocument()
     );
   });
 
   test('displays an error when the API crashes', async () => {
     mockGetAllPokemons.mockRejectedValueOnce(new Error('API Error'));
-    render(<Main />);
+    render(
+      <MemoryRouter>
+        <Main />
+      </MemoryRouter>
+    );
     await waitFor(() => {
       expect(screen.getByText(/API Error/i)).toBeInTheDocument();
     });
@@ -82,26 +112,19 @@ describe('Main', () => {
     mockGetPokemon.mockResolvedValueOnce([
       { name: 'bulbasaur', description: 'Abilities: overgrow, chlorophyll' },
     ]);
-    render(<Main />);
+    render(
+      <MemoryRouter>
+        <Main />
+      </MemoryRouter>
+    );
     const userActions = userEvent.setup();
     await userActions.type(screen.getByRole('textbox'), 'bulbasaur');
     await userActions.click(screen.getByRole('button', { name: /search/i }));
     expect(localStorage.getItem('searchTerm')).toBe('bulbasaur');
-    expect(mockGetPokemon).toHaveBeenCalledWith('bulbasaur');
+    expect(mockGetPokemon).toHaveBeenCalledWith('bulbasaur', mapPokemon);
     await waitFor(() =>
-      expect(screen.getByText('BULBASAUR')).toBeInTheDocument()
+      expect(screen.getByText('bulbasaur')).toBeInTheDocument()
     );
     expect(screen.queryByText(/Loading/i)).not.toBeInTheDocument();
-  });
-
-  test('shows fallback UI when "Throw Error" button is clicked', async () => {
-    mockGetAllPokemons.mockResolvedValueOnce([]);
-    render(<Main />);
-    const userActions = userEvent.setup();
-    const throwButton = screen.getByRole('button', { name: /Throw error/i });
-    await userActions.click(throwButton);
-    expect(
-      await screen.findByText(/Oops! something went wrong/i)
-    ).toBeInTheDocument();
   });
 });

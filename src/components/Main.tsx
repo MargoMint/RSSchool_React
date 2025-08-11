@@ -1,72 +1,117 @@
-import { Component } from 'react';
-import Button from './Button';
-import { Layout } from './Layout';
+import { useEffect, useState, useCallback, useMemo } from 'react';
+import Layout from './Layout';
 import Search from './Search';
-import Api from '../utils/Api';
-import type { MainState } from '../types/MainState';
-import { ErrorBoundary } from './ErrorBoundary';
+import Api from '../api/Api';
+import ErrorBoundary from './ErrorBoundary';
 import ResultsArea from './ResultsArea';
-class Main extends Component<object, MainState> {
-  private api: Api;
+import type { Pokemon } from '../types/Pokemon';
+import { Link, useSearchParams, Outlet } from 'react-router-dom';
+import useLocalStorage from '../hooks/useLocalStorage';
+import Button from './Button';
+import getValidPage from '../utils/getValidPage';
+import { mapPokemon } from '../utils/mapPokemon';
 
-  constructor(props: object) {
-    super(props);
-    this.state = {
-      shouldThrow: false,
-      isLoading: false,
-      error: null,
-      results: [],
-    };
-    this.api = new Api();
-  }
+function Main() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [results, setResults] = useState<Pokemon[]>([]);
+  const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
+  const api = useMemo(() => new Api(), []);
 
-  componentDidMount(): void {
-    const savedTerm = localStorage.getItem('searchTerm') || '';
-    this.fetchData(savedTerm);
-  }
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = getValidPage(searchParams);
+  const limit = 10;
+  const offset = (currentPage - 1) * limit;
 
-  fetchData = (term: string) => {
-    this.setState({ isLoading: true, error: null });
+  const handleCardClick = (name: string) => {
+    searchParams.set('details', name);
+    setSearchParams(searchParams);
+  };
+
+  const fetchData = useCallback(() => {
+    setIsLoading(true);
+    setError(null);
+
+    const trimmedQuery = searchTerm.trim();
+    const dataPromise = trimmedQuery
+      ? api.getPokemon(trimmedQuery, mapPokemon)
+      : api.getAllPokemons(offset, limit, mapPokemon);
+
+    dataPromise
+      .then((data) => {
+        if (!Array.isArray(data)) {
+          setResults([data]);
+        } else {
+          setResults(data);
+        }
+      })
+      .catch((err) => {
+        setError(err.message);
+        setResults([]);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [api, searchTerm, offset, limit]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const onSearch = (term: string) => {
     const trimmedQuery = term.trim();
-    const request = trimmedQuery
-      ? this.api.getPokemon(trimmedQuery)
-      : this.api.getAllPokemons();
-    request
-      .then((data) => this.setState({ results: data, isLoading: false }))
-      .catch((error) =>
-        this.setState({ error: error.message, isLoading: false, results: [] })
-      );
+    setSearchTerm(trimmedQuery);
+    setSearchParams({ page: '1' });
   };
 
-  handleErrorReset = () => {
-    this.setState({ shouldThrow: false });
-  };
+  return (
+    <Layout>
+      <div className="text-center">
+        Curious about who created this Pokemon search app? Visit the
+        <Link to={'/about'}>
+          <p className="text-red-700 font-medium hover:underline">About Page</p>
+        </Link>
+      </div>
 
-  onSearch = (term: string) => {
-    localStorage.setItem('searchTerm', term);
-    this.fetchData(term);
-  };
+      <Search onSearch={onSearch} />
 
-  render() {
-    return (
-      <Layout>
-        <Search onSearch={this.onSearch} />
-        <ErrorBoundary onReset={this.handleErrorReset}>
-          <ResultsArea
-            shouldThrow={this.state.shouldThrow}
-            isLoading={this.state.isLoading}
-            error={this.state.error}
-            results={this.state.results}
-          />
-          <div className="flex justify-center pt-2 border-t-4 border-red-800 mt-4">
-            <Button onClick={() => this.setState({ shouldThrow: true })}>
-              Throw Error
-            </Button>
-          </div>
-        </ErrorBoundary>
-      </Layout>
-    );
-  }
+      <div className="flex flex-col md:flex-row">
+        <div className="md:w-2/3">
+          <ErrorBoundary>
+            <ResultsArea
+              isLoading={isLoading}
+              error={error}
+              results={results}
+              onCardClick={handleCardClick}
+            />
+          </ErrorBoundary>
+
+          {!searchTerm && (
+            <div className="flex justify-center gap-4 my-6">
+              <Button
+                title="Prev"
+                variant="outline"
+                onClick={() => {
+                  if (currentPage > 1) {
+                    setSearchParams({ page: (currentPage - 1).toString() });
+                  }
+                }}
+              />
+              <Button
+                title="Next"
+                variant="primary"
+                onClick={() =>
+                  setSearchParams({ page: (currentPage + 1).toString() })
+                }
+              />
+            </div>
+          )}
+        </div>
+
+        <Outlet context={{ api }} />
+      </div>
+    </Layout>
+  );
 }
 
 export default Main;

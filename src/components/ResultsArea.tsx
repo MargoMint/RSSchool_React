@@ -1,23 +1,24 @@
-import { Component } from 'react';
 import CardList from './CardList';
+import StatusMessage from './StatusMessage';
 import type { MainState } from '../types/MainState';
 
-class ResultsArea extends Component<MainState> {
-  render() {
-    const { shouldThrow, isLoading, error, results } = this.props;
+interface ResultsAreaProps extends MainState {
+  onCardClick: (name: string) => void;
+}
 
-    if (shouldThrow) {
-      throw new Error('Test Error');
-    }
-    if (isLoading) {
-      return <p className="text-center text-red-800">Loading...</p>;
-    }
-    if (error) {
-      return <p className="text-center text-red-800">{error}</p>;
-    }
+function ResultsArea({
+  isLoading,
+  error,
+  results,
+  onCardClick,
+}: ResultsAreaProps) {
+  const showStatus = isLoading || error;
 
-    return <CardList cardItems={results} />;
+  if (showStatus) {
+    return <StatusMessage isLoading={isLoading} error={error} />;
   }
+
+  return <CardList cardItems={results} onCardClick={onCardClick} />;
 }
 
 export default ResultsArea;

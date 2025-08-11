@@ -1,4 +1,4 @@
-import { ErrorBoundary } from '../components/ErrorBoundary';
+import ErrorBoundary from '../components/ErrorBoundary';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -10,6 +10,14 @@ const ErrorThrowingComponent = ({ shouldThrow }: { shouldThrow: boolean }) => {
 };
 
 describe('ErrorBoundary', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    (console.error as jest.Mock).mockRestore();
+  });
+
   const userActions = userEvent.setup();
 
   test('renders child elements if there are no errors', () => {

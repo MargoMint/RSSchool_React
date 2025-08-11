@@ -5,15 +5,21 @@ import userEvent from '@testing-library/user-event';
 describe('Button', () => {
   const userActions = userEvent.setup();
 
-  test('renders button children correctly', () => {
-    render(<Button onClick={() => {}}>The label on the button</Button>);
+  test('renders button title correctly', () => {
+    render(
+      <Button
+        onClick={() => {}}
+        title="The label on the button"
+        variant="primary"
+      />
+    );
     expect(screen.getByRole('button')).toHaveTextContent(
       'The label on the button'
     );
   });
 
-  test('button works as expected even if there are no children', () => {
-    render(<Button onClick={() => {}}>{null}</Button>);
+  test('renders button with empty title without error', () => {
+    render(<Button onClick={() => {}} title="" variant="primary" />);
     expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
@@ -21,12 +27,10 @@ describe('Button', () => {
     const handleClick = jest.fn();
     render(
       <Button
-        onClick={() => {
-          handleClick();
-        }}
-      >
-        The label on the button
-      </Button>
+        onClick={handleClick}
+        title="The label on the button"
+        variant="primary"
+      />
     );
     await userActions.click(screen.getByRole('button'));
     expect(handleClick).toHaveBeenCalledTimes(1);
@@ -34,7 +38,13 @@ describe('Button', () => {
 
   test('does not call onClick without click on the button', () => {
     const handleClick = jest.fn();
-    render(<Button onClick={handleClick}>The label on the button</Button>);
+    render(
+      <Button
+        onClick={handleClick}
+        title="The label on the button"
+        variant="primary"
+      />
+    );
     expect(handleClick).not.toHaveBeenCalled();
   });
 });

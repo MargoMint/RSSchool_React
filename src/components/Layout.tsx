@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
+import type { PropsWithChildren } from 'react';
+import Header from './Header';
 
-interface LayoutProps {
-  children: React.ReactNode;
+function Layout({ children }: PropsWithChildren) {
+  return (
+    <>
+      <Header />
+      <div className="max-w-4xl mx-auto pt-4 px-4">{children}</div>
+    </>
+  );
 }
 
-export class Layout extends Component<LayoutProps> {
-  render() {
-    return (
-      <div className="max-w-4xl mx-auto pt-4 px-4">{this.props.children}</div>
-    );
-  }
-}
+export default Layout;

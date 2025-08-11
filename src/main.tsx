@@ -1,12 +1,10 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import App from './App';
 import './index.css';
-import Header from './components/Header';
-import Main from './components/Main';
 
 createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>
-    <Header />
-    <Main />
+    <App />
   </StrictMode>
 );
