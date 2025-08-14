@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { unselectAll } from '../store/selectedSlice';
+import { unselectAll, selectSelectedPokemon } from '../store/selectedSlice';
 import downloadCsv from '../utils/downloadCsv';
 import Button from './Button';
 import { useMemo } from 'react';
@@ -10,7 +10,7 @@ import {
 
 function Flyout() {
   const dispatch = useAppDispatch();
-  const selected = useAppSelector((state) => state.selectedPokemon.selected);
+  const selected = useAppSelector(selectSelectedPokemon);
 
   const { url, fileName } = useMemo(() => {
     if (selected.length === 0) return { url: '', fileName: '' };

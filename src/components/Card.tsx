@@ -1,6 +1,7 @@
 import { togglePokemon } from '../store/selectedSlice';
 import type { Pokemon } from '../types/Pokemon';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { selectSelectedPokemon } from '../store/selectedSlice';
 interface CardProps {
   pokemon: Pokemon;
   onCardClick: (name: string) => void;
@@ -8,8 +9,8 @@ interface CardProps {
 
 function Card({ pokemon, onCardClick }: CardProps) {
   const dispatch = useAppDispatch();
-  const selected = useAppSelector((state) =>
-    state.selectedPokemon.selected.find((item) => item.id === pokemon.id)
+  const isSelectedPokemon = useAppSelector(selectSelectedPokemon).some(
+    (item) => item.id === pokemon.id
   );
 
   const handleCheckboxChange = () => {
@@ -20,7 +21,7 @@ function Card({ pokemon, onCardClick }: CardProps) {
     <div className="flex items-center gap-4">
       <input
         type="checkbox"
-        checked={!!selected}
+        checked={isSelectedPokemon}
         onChange={handleCheckboxChange}
         className="w-5 h-5 accent-red-800 cursor-pointer"
       />
