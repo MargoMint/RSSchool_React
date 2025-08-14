@@ -11,8 +11,7 @@ type ButtonProps = PropsWithChildren<{
 function Button({ onClick, title, variant, children }: ButtonProps) {
   const buttonClassName = twMerge(
     clsx('rounded-lg px-4 py-2 font-medium hover:cursor-pointer', {
-      'bg-red-800 text-white text-[var(--primary-white)]':
-        variant === 'primary',
+      'bg-red-800 text-[var(--primary-white)]': variant === 'primary',
       'border-2 border-red-800 text-red-800 bg-transparent':
         variant === 'outline',
       'bg-[var(--primary-white)] text-red-800 border-2 border-red-800':
