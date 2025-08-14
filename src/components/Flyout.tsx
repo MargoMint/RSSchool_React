@@ -4,6 +4,10 @@ import { unselectAll } from '../store/selectedSlice';
 import downloadCsv from '../utils/downloadCsv';
 import Button from './Button';
 import { useMemo } from 'react';
+import {
+  FLYOUT_CONTAINER_CLASSES,
+  FILE_DOWNLOAD_CLASSES,
+} from '../constants/flyoutClasses';
 
 function Flyout() {
   const dispatch = useDispatch();
@@ -22,7 +26,7 @@ function Flyout() {
   if (selected.length === 0) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 w-full p-3 bg-red-800 flex justify-between items-center">
+    <div className={FLYOUT_CONTAINER_CLASSES}>
       <p className="text-white uppercase font-bold">
         {selected.length} item{selected.length > 1 ? 's are' : ''} selected
       </p>
@@ -35,11 +39,7 @@ function Flyout() {
         />
 
         {url && (
-          <a
-            href={url}
-            download={fileName}
-            className="rounded-lg px-4 py-2 font-medium hover:cursor-pointer bg-white text-red-800 border-2 border-red-800"
-          >
+          <a href={url} download={fileName} className={FILE_DOWNLOAD_CLASSES}>
             Download
           </a>
         )}
