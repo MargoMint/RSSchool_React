@@ -10,8 +10,10 @@ function ThemeContextProvider({ children }: PropsWithChildren) {
     const html = document.documentElement;
     if (theme === 'dark') {
       html.classList.add('dark');
+      document.documentElement.setAttribute('data-theme', 'dark');
     } else {
       html.classList.remove('dark');
+      document.documentElement.removeAttribute('data-theme');
     }
   }, [theme]);
 

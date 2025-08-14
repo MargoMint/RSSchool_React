@@ -11,10 +11,8 @@ import Button from './Button';
 import getValidPage from '../utils/getValidPage';
 import { mapPokemon } from '../utils/mapPokemon';
 import Flyout from './Flyout';
-import useTheme from '../hooks/useTheme';
 
 function Main() {
-  const { theme } = useTheme();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [results, setResults] = useState<Pokemon[]>([]);
@@ -102,7 +100,7 @@ function Main() {
               />
               <Button
                 title="Next"
-                variant={theme === 'dark' ? 'darkPrimary' : 'primary'}
+                variant={'primary'}
                 onClick={() =>
                   setSearchParams({ page: (currentPage + 1).toString() })
                 }
