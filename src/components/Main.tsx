@@ -7,13 +7,11 @@ import useLocalStorage from '../hooks/useLocalStorage';
 import Button from './Button';
 import getValidPage from '../utils/getValidPage';
 import Flyout from './Flyout';
-import useTheme from '../hooks/useTheme';
 import { useGetPokemonQuery, useGetAllPokemonsQuery } from '../api/pokemonApi';
 import Card from './Card';
 import StatusMessage from './StatusMessage';
 
 function Main() {
-  const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = getValidPage(searchParams);
@@ -110,7 +108,7 @@ function Main() {
               />
               <Button
                 title="Next"
-                variant={theme === 'dark' ? 'darkPrimary' : 'primary'}
+                variant={'primary'}
                 onClick={() =>
                   setSearchParams({ page: (currentPage + 1).toString() })
                 }

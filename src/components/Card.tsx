@@ -1,16 +1,16 @@
-import { useDispatch, useSelector } from 'react-redux';
 import { togglePokemon } from '../store/selectedSlice';
 import type { Pokemon } from '../types/Pokemon';
-import type { RootState } from '../store/store';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { selectSelectedPokemon } from '../store/selectedSlice';
 interface CardProps {
   pokemon: Pokemon;
   onCardClick: (name: string) => void;
 }
 
 function Card({ pokemon, onCardClick }: CardProps) {
-  const dispatch = useDispatch();
-  const selected = useSelector((state: RootState) =>
-    state.selectedPokemon.selected.find((item) => item.id === pokemon.id)
+  const dispatch = useAppDispatch();
+  const isSelectedPokemon = useAppSelector(selectSelectedPokemon).some(
+    (item) => item.id === pokemon.id
   );
 
   const handleCheckboxChange = () => {
@@ -21,7 +21,7 @@ function Card({ pokemon, onCardClick }: CardProps) {
     <div className="flex items-center gap-4">
       <input
         type="checkbox"
-        checked={!!selected}
+        checked={isSelectedPokemon}
         onChange={handleCheckboxChange}
         className="w-5 h-5 accent-red-800 cursor-pointer"
       />

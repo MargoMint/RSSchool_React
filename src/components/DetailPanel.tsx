@@ -1,12 +1,9 @@
 import { useSearchParams } from 'react-router-dom';
 import Button from './Button';
 import StatusMessage from './StatusMessage';
-import useTheme from '../hooks/useTheme';
-import clsx from 'clsx';
 import { useGetPokemonQuery } from '../api/pokemonApi';
 
 function DetailPanel() {
-  const { theme } = useTheme();
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedItem = searchParams.get('details');
 
@@ -32,10 +29,9 @@ function DetailPanel() {
 
       {loadedPokemon && (
         <div
-          className={clsx(
-            'flex flex-col gap-6 flex-grow',
-            theme === 'dark' ? 'text-[#1b1b1b]' : 'text-white'
-          )}
+          className={
+            'flex flex-col gap-6 flex-grow text-[var(--primary-white)]'
+          }
         >
           <img
             src={loadedPokemon.image}
