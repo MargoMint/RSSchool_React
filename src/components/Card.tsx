@@ -1,15 +1,14 @@
-import { useDispatch, useSelector } from 'react-redux';
 import { togglePokemon } from '../store/selectedSlice';
 import type { Pokemon } from '../types/Pokemon';
-import type { RootState } from '../store/store';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 interface CardProps {
   pokemon: Pokemon;
   onCardClick: (name: string) => void;
 }
 
 function Card({ pokemon, onCardClick }: CardProps) {
-  const dispatch = useDispatch();
-  const selected = useSelector((state: RootState) =>
+  const dispatch = useAppDispatch();
+  const selected = useAppSelector((state) =>
     state.selectedPokemon.selected.find((item) => item.id === pokemon.id)
   );
 

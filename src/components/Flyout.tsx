@@ -1,5 +1,4 @@
-import { useDispatch, useSelector } from 'react-redux';
-import type { RootState } from '../store/store';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { unselectAll } from '../store/selectedSlice';
 import downloadCsv from '../utils/downloadCsv';
 import Button from './Button';
@@ -10,10 +9,8 @@ import {
 } from '../constants/flyoutClasses';
 
 function Flyout() {
-  const dispatch = useDispatch();
-  const selected = useSelector(
-    (state: RootState) => state.selectedPokemon.selected
-  );
+  const dispatch = useAppDispatch();
+  const selected = useAppSelector((state) => state.selectedPokemon.selected);
 
   const { url, fileName } = useMemo(() => {
     if (selected.length === 0) return { url: '', fileName: '' };
