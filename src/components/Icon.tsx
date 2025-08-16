@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import useTheme from '../hooks/useTheme';
+import Image from 'next/image';
 
 interface IconProps {
   lightThemeIcon: string;
@@ -22,10 +23,7 @@ function Icon({ lightThemeIcon, darkThemeIcon }: IconProps) {
 
   const themeIcon = theme === 'light' ? lightThemeIcon : darkThemeIcon;
 
-  const themeDescription =
-    theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme';
-
-  return <img src={themeIcon} alt={themeDescription} className="w-8 h-8" />;
+  return <Image src={themeIcon} alt="themeIcon" width={32} height={32} />;
 }
 
 export default Icon;

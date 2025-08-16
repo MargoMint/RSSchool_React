@@ -4,6 +4,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Button from './Button';
 import StatusMessage from './StatusMessage';
 import { useGetPokemonQuery } from '../api/pokemonApi';
+import Image from 'next/image';
 
 function DetailPanel() {
   const searchParams = useSearchParams();
@@ -42,10 +43,12 @@ function DetailPanel() {
             'flex flex-col gap-6 flex-grow text-[var(--primary-white)]'
           }
         >
-          <img
+          <Image
             src={loadedPokemon.image}
             alt={loadedPokemon.name}
-            className="w-32 h-32 object-contain mx-auto"
+            width={128}
+            height={128}
+            className="object-contain mx-auto"
           />
 
           <h2 className="text-3xl font-extrabold text-center uppercase border-b border-[var(--primary-white)] pb-2">
