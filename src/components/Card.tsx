@@ -1,3 +1,5 @@
+'use client';
+
 import { togglePokemon } from '../store/selectedSlice';
 import type { Pokemon } from '../types/Pokemon';
 import { useAppDispatch, useAppSelector } from '../store/hooks';

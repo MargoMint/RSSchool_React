@@ -1,3 +1,6 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import useTheme from '../hooks/useTheme';
 
 interface IconProps {
@@ -7,6 +10,15 @@ interface IconProps {
 
 function Icon({ lightThemeIcon, darkThemeIcon }: IconProps) {
   const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   const themeIcon = theme === 'light' ? lightThemeIcon : darkThemeIcon;
 

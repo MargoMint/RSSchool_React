@@ -1,10 +1,13 @@
-import { useSearchParams } from 'react-router-dom';
+'use client';
+
+import { useSearchParams, useRouter } from 'next/navigation';
 import Button from './Button';
 import StatusMessage from './StatusMessage';
 import { useGetPokemonQuery } from '../api/pokemonApi';
 
 function DetailPanel() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const selectedItem = searchParams.get('details');
 
   const {
@@ -16,6 +19,12 @@ function DetailPanel() {
   });
 
   if (!selectedItem) return null;
+
+  const handleClose = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('details');
+    router.push(`?${params.toString()}`);
+  };
 
   return (
     <div
@@ -39,7 +48,7 @@ function DetailPanel() {
             className="w-32 h-32 object-contain mx-auto"
           />
 
-          <h2 className="text-3xl font-extrabold text-center uppercase border-b pb-2">
+          <h2 className="text-3xl font-extrabold text-center uppercase border-b border-[var(--primary-white)] pb-2">
             {loadedPokemon.name}
           </h2>
 
@@ -67,14 +76,7 @@ function DetailPanel() {
       )}
 
       <div className="mt-auto pt-4 flex justify-center">
-        <Button
-          onClick={() => {
-            searchParams.delete('details');
-            setSearchParams(searchParams);
-          }}
-          title="Close"
-          variant="modal"
-        />
+        <Button onClick={handleClose} title="Close" variant="modal" />
       </div>
     </div>
   );

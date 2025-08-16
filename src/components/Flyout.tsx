@@ -1,12 +1,16 @@
+'use client';
+
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { unselectAll, selectSelectedPokemon } from '../store/selectedSlice';
 import downloadCsv from '../utils/downloadCsv';
 import Button from './Button';
 import { useMemo } from 'react';
-import {
-  FLYOUT_CONTAINER_CLASSES,
-  FILE_DOWNLOAD_CLASSES,
-} from '../constants/flyoutClasses';
+
+const FLYOUT_CONTAINER_CLASSES =
+  'fixed bottom-0 left-0 w-full p-3 bg-red-800 flex justify-between items-center';
+
+const FILE_DOWNLOAD_CLASSES =
+  'rounded-lg px-4 py-2 font-medium hover:cursor-pointer bg-white text-red-800 border-2 border-red-800';
 
 function Flyout() {
   const dispatch = useAppDispatch();

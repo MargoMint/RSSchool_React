@@ -1,3 +1,5 @@
+'use client';
+
 import useTheme from '../hooks/useTheme';
 import Button from './Button';
 import Icon from './Icon';
@@ -9,7 +11,10 @@ function ThemeToggle() {
 
   return (
     <Button onClick={toggleTheme} variant="icon">
-      <Icon lightThemeIcon={lightThemeIcon} darkThemeIcon={darkThemeIcon} />
+      <Icon
+        lightThemeIcon={lightThemeIcon.src}
+        darkThemeIcon={darkThemeIcon.src}
+      />
     </Button>
   );
 }
