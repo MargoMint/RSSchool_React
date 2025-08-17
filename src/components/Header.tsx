@@ -1,4 +1,5 @@
 import ThemeToggle from './ThemeToggle';
+import LanguageSwitcher from './LanguageSwitcher';
 
 function Header() {
   return (
@@ -7,7 +8,8 @@ function Header() {
       <h1 className="text-3xl font-extrabold text-red-800 uppercase">
         PokeSearch
       </h1>
-      <div className="justify-self-end">
+      <div className="flex items-center justify-self-end">
+        <LanguageSwitcher />
         <ThemeToggle />
       </div>
     </header>

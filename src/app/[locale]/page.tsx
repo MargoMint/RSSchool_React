@@ -1,21 +1,26 @@
 'use client';
 
-import Layout from '../components/Layout';
-import Search from '../components/Search';
-import ErrorBoundary from '../components/ErrorBoundary';
-import ResultsArea from '../components/ResultsArea';
-import Link from 'next/link';
+import Layout from '../../components/Layout';
+import Search from '../../components/Search';
+import ErrorBoundary from '../../components/ErrorBoundary';
+import ResultsArea from '../../components/ResultsArea';
+import { Link } from '../../i18n/navigation';
 import { useSearchParams, useRouter } from 'next/navigation';
-import useLocalStorage from '../hooks/useLocalStorage';
-import Button from '../components/Button';
-import getValidPage from '../utils/getValidPage';
-import Flyout from '../components/Flyout';
-import { useGetPokemonQuery, useGetAllPokemonsQuery } from '../api/pokemonApi';
-import Card from '../components/Card';
-import StatusMessage from '../components/StatusMessage';
-import DetailPanel from '../components/DetailPanel';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import Button from '../../components/Button';
+import getValidPage from '../../utils/getValidPage';
+import Flyout from '../../components/Flyout';
+import {
+  useGetPokemonQuery,
+  useGetAllPokemonsQuery,
+} from '../../api/pokemonApi';
+import Card from '../../components/Card';
+import StatusMessage from '../../components/StatusMessage';
+import DetailPanel from '../../components/DetailPanel';
+import { useTranslations } from 'next-intl';
 
 function Main() {
+  const t = useTranslations('HomePage');
   const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -57,17 +62,17 @@ function Main() {
     <>
       <Layout>
         <div className="text-center">
-          Curious about who created this Pokemon search app? Visit the
-          <Link href={'/about'}>
+          {t('aboutDescr')}
+          <Link href="/about">
             <p className="text-red-700 font-medium hover:underline">
-              About Page
+              {t('about')}
             </p>
           </Link>
         </div>
         <div className="flex gap-1 justify-center items-center">
           <Search onSearch={onSearch} />
           <Button
-            title="Refresh"
+            title={t('refresh')}
             variant="neutral"
             onClick={() => {
               if (trimmedQuery) {
@@ -106,7 +111,7 @@ function Main() {
             {!searchTerm && (
               <div className="flex justify-center gap-4 my-6">
                 <Button
-                  title="Prev"
+                  title={t('prev')}
                   variant="outline"
                   onClick={() => {
                     if (currentPage > 1) {
@@ -115,7 +120,7 @@ function Main() {
                   }}
                 />
                 <Button
-                  title="Next"
+                  title={t('next')}
                   variant={'primary'}
                   onClick={() => router.push(`?page=${currentPage + 1}`)}
                 />

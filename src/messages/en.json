@@ -1,0 +1,30 @@
+{
+  "HomePage": {
+    "aboutDescr": "Curious about who created this Pokemon search app? Visit the",
+    "about": "About Page",
+    "search": "Search",
+    "refresh": "Refresh",
+    "prev": "Prev",
+    "next": "Next",
+    "unselectAll": "Unselect all",
+    "download": "Download",
+    "selectedItems": "{count, plural, one {{count} item selected} other {{count} items selected}}"
+  },
+  "DetailPanel": {
+    "height": "Height:",
+    "weight": "Weight:",
+    "types": "Types:",
+    "abilities": "Abilities:",
+    "close": "Закрыть"
+  },
+  "AboutPage": {
+    "pageTitle": "About the App Page",
+    "mainDescription": "Hey there! I'm Rita, a frontend developer with a love for web technologies and Pokemon. This Pokemon search tool is a personal project to practice React and have some fun along the way. I hope you find it useful — or at least nostalgic. Thanks for stopping by!",
+    "secondDescription": "This app was built as part of the",
+    "back": "Back to Home",
+    "author": "Author: Marharyta (MargoMint)"
+  },
+  "NotFoundPage": {
+    "mainMessage": "Oops, there is no such page"
+  }
+}

@@ -5,8 +5,10 @@ import Button from './Button';
 import StatusMessage from './StatusMessage';
 import { useGetPokemonQuery } from '../api/pokemonApi';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 function DetailPanel() {
+  const t = useTranslations('DetailPanel');
   const searchParams = useSearchParams();
   const router = useRouter();
   const selectedItem = searchParams.get('details');
@@ -57,21 +59,21 @@ function DetailPanel() {
 
           <div className="flex flex-col gap-2 text-sm">
             <div className="flex gap-1">
-              <span className="font-semibold">Height:</span>
+              <span className="font-semibold">{t('height')}</span>
               <span>{loadedPokemon.height}</span>
             </div>
             <div className="flex gap-1">
-              <span className="font-semibold">Weight:</span>
+              <span className="font-semibold">{t('weight')}</span>
               <span>{loadedPokemon.weight}</span>
             </div>
             <div className="flex gap-1">
-              <span className="font-semibold">Types:</span>
+              <span className="font-semibold">{t('types')}</span>
               <span className="capitalize">
                 {loadedPokemon.types.join(', ')}
               </span>
             </div>
             <div className="flex gap-1">
-              <span className="font-semibold">Abilities:</span>
+              <span className="font-semibold">{t('abilities')}</span>
               <span className="capitalize">{loadedPokemon.description}</span>
             </div>
           </div>
@@ -79,7 +81,7 @@ function DetailPanel() {
       )}
 
       <div className="mt-auto pt-4 flex justify-center">
-        <Button onClick={handleClose} title="Close" variant="modal" />
+        <Button onClick={handleClose} title={t('close')} variant="modal" />
       </div>
     </div>
   );
