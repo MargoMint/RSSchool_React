@@ -1,17 +1,20 @@
 'use client';
 
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from '../i18n/navigation';
 import Button from './Button';
 import StatusMessage from './StatusMessage';
 import { useGetPokemonQuery } from '../api/pokemonApi';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
+import getValidPage from '../utils/getValidPage';
 
 function DetailPanel() {
   const t = useTranslations('DetailPanel');
   const searchParams = useSearchParams();
   const router = useRouter();
   const selectedItem = searchParams.get('details');
+  const currentPage = getValidPage(searchParams);
 
   const {
     data: loadedPokemon,
@@ -24,9 +27,10 @@ function DetailPanel() {
   if (!selectedItem) return null;
 
   const handleClose = () => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete('details');
-    router.push(`?${params.toString()}`);
+    router.push({
+      pathname: '/',
+      query: { page: currentPage },
+    });
   };
 
   return (

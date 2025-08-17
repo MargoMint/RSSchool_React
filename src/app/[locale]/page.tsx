@@ -5,7 +5,8 @@ import Search from '../../components/Search';
 import ErrorBoundary from '../../components/ErrorBoundary';
 import ResultsArea from '../../components/ResultsArea';
 import { Link } from '../../i18n/navigation';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from '../../i18n/navigation';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import Button from '../../components/Button';
 import getValidPage from '../../utils/getValidPage';
@@ -47,15 +48,19 @@ function Main() {
   const displayLoading = trimmedQuery ? isLoading : isAllLoading;
 
   const handleCardClick = (name: string) => {
-    const params = new URLSearchParams(searchParams);
-    params.set('details', name);
-    router.push(`?${params.toString()}`);
+    router.push({
+      pathname: '/',
+      query: { details: name, page: currentPage },
+    });
   };
 
   const onSearch = (term: string) => {
     const trimmed = term.trim();
     setSearchTerm(trimmed);
-    router.push(`?page=1`);
+    router.push({
+      pathname: '/',
+      query: { page: 1 },
+    });
   };
 
   return (
@@ -115,14 +120,22 @@ function Main() {
                   variant="outline"
                   onClick={() => {
                     if (currentPage > 1) {
-                      router.push(`?page=${currentPage - 1}`);
+                      router.push({
+                        pathname: '/',
+                        query: { page: currentPage - 1 },
+                      });
                     }
                   }}
                 />
                 <Button
                   title={t('next')}
                   variant={'primary'}
-                  onClick={() => router.push(`?page=${currentPage + 1}`)}
+                  onClick={() =>
+                    router.push({
+                      pathname: '/',
+                      query: { page: currentPage + 1 },
+                    })
+                  }
                 />
               </div>
             )}
