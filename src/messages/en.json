@@ -11,10 +11,11 @@
     "selectedItems": "{count, plural, one {{count} item selected} other {{count} items selected}}"
   },
   "DetailPanel": {
-    "height": "Height:",
-    "weight": "Weight:",
-    "types": "Types:",
-    "abilities": "Abilities:",
+    "name": "Name",
+    "height": "Height",
+    "weight": "Weight",
+    "types": "Types",
+    "abilities": "Abilities",
     "close": "Close"
   },
   "AboutPage": {

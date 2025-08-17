@@ -63,21 +63,21 @@ function DetailPanel() {
 
           <div className="flex flex-col gap-2 text-sm">
             <div className="flex gap-1">
-              <span className="font-semibold">{t('height')}</span>
+              <span className="font-semibold">{t('height')}:</span>
               <span>{loadedPokemon.height}</span>
             </div>
             <div className="flex gap-1">
-              <span className="font-semibold">{t('weight')}</span>
+              <span className="font-semibold">{t('weight')}:</span>
               <span>{loadedPokemon.weight}</span>
             </div>
             <div className="flex gap-1">
-              <span className="font-semibold">{t('types')}</span>
+              <span className="font-semibold">{t('types')}:</span>
               <span className="capitalize">
                 {loadedPokemon.types.join(', ')}
               </span>
             </div>
             <div className="flex gap-1">
-              <span className="font-semibold">{t('abilities')}</span>
+              <span className="font-semibold">{t('abilities')}:</span>
               <span className="capitalize">{loadedPokemon.description}</span>
             </div>
           </div>

@@ -11,10 +11,11 @@
     "selectedItems": "{count, plural, one {{count} элемент выбран} few {{count} элемента выбрано} many {{count} элементов выбрано} other {{count} элементов выбрано}}"
   },
   "DetailPanel": {
-    "height": "Рост:",
-    "weight": "Вес:",
-    "types": "Типы:",
-    "abilities": "Способности:",
+    "name": "Имя",
+    "height": "Рост",
+    "weight": "Вес",
+    "types": "Типы",
+    "abilities": "Способности",
     "close": "Закрыть"
   },
   "AboutPage": {

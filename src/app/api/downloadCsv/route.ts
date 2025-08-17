@@ -7,6 +7,7 @@ import type { Pokemon } from '../../../types/Pokemon';
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const names = searchParams.get('names');
+  const locale = searchParams.get('locale') || 'en';
 
   if (!names) return NextResponse.json({ error: 'Error' }, { status: 400 });
 
@@ -24,8 +25,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Error' }, { status: 404 });
     }
 
-    const csv = downloadCsv(pokemons);
-
+    const csv = await downloadCsv(pokemons, locale);
     const fileName = `${pokemons.length}_items.csv`;
 
     return new NextResponse(csv, {
