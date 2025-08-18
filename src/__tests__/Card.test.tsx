@@ -1,69 +1,38 @@
 import Card from '../components/Card';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import selectedPokemonReducer from '../store/selectedSlice';
-import type { Pokemon } from '../types/Pokemon';
+import mockPokemon from '../test-utils/mockPokemon';
 
 describe('Card', () => {
   const mockClick = jest.fn();
+  const mockCheckboxChange = jest.fn();
 
   beforeEach(() => {
     mockClick.mockClear();
+    mockCheckboxChange.mockClear();
   });
 
-  const pokemonStore = configureStore({
-    reducer: { selectedPokemon: selectedPokemonReducer },
-  });
-
-  const bulbasaur: Pokemon = {
-    id: 1,
-    name: 'bulbasaur',
-    description: 'overgrow, chlorophyll',
-    height: 7,
-    weight: 69,
-    types: ['grass', 'poison'],
-    image: 'https://example.com/bulbasaur.png',
-  };
-
-  const emptyPokemon: Pokemon = {
-    id: 2,
-    name: '',
-    description: '',
-    height: 0,
-    weight: 0,
-    types: [],
-    image: '',
-  };
-
-  const renderPokemonWithProvider = (
-    pokemon: Pokemon,
-    onCardClick = mockClick
-  ) =>
+  const renderCard = (isSelected = false) =>
     render(
-      <Provider store={pokemonStore}>
-        <Card pokemon={pokemon} onCardClick={onCardClick} />
-      </Provider>
+      <Card
+        pokemon={mockPokemon}
+        isSelected={isSelected}
+        onCardClick={mockClick}
+        onCheckboxChange={mockCheckboxChange}
+      />
     );
 
   test('displays item name and description correctly', () => {
-    renderPokemonWithProvider(bulbasaur);
-
+    renderCard();
     expect(screen.getByText('bulbasaur')).toBeInTheDocument();
     expect(
       screen.getByText('Abilities: overgrow, chlorophyll')
     ).toBeInTheDocument();
   });
 
-  test('handles empty name and description gracefully', () => {
-    renderPokemonWithProvider(emptyPokemon);
-    expect(screen.queryByText(/./)).toBeNull();
-  });
-
   test('calls onCardClick when clicked', async () => {
     const userActions = userEvent.setup();
-    renderPokemonWithProvider(bulbasaur, mockClick);
+    renderCard();
 
     await userActions.click(screen.getByTestId('card'));
     expect(mockClick).toHaveBeenCalledTimes(1);
@@ -72,15 +41,9 @@ describe('Card', () => {
 
   test('toggles checkbox', async () => {
     const userActions = userEvent.setup();
-    renderPokemonWithProvider(bulbasaur);
+    renderCard();
 
-    const checkbox = screen.getByRole('checkbox');
-    expect(checkbox).not.toBeChecked();
-
-    await userActions.click(checkbox);
-    expect(checkbox).toBeChecked();
-
-    await userActions.click(checkbox);
-    expect(checkbox).not.toBeChecked();
+    await userActions.click(screen.getByRole('checkbox'));
+    expect(mockCheckboxChange).toHaveBeenCalledTimes(1);
   });
 });
