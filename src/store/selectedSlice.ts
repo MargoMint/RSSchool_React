@@ -28,7 +28,7 @@ export const selectedItemsSlice = createSlice({
     },
 
     unselectAll(state) {
-      state.selected = [];
+      state.selected = initialState.selected;
     },
   },
 });
