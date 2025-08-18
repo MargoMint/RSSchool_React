@@ -36,13 +36,17 @@ function DetailPanel() {
 
   return (
     <div
-      className="w-full md:w-1/3 max-h-[65vh] rounded-lg mt-4 p-4 bg-red-800 border border-gray-300 flex flex-col"
+      className="w-full md:w-1/3 max-h-[65vh] rounded-lg mt-4 p-4 bg-red-800 border border-red-400 flex flex-col"
       data-testid="detail-panel"
     >
       <StatusMessage isLoading={isLoading} error={error} />
 
       {loadedPokemon && (
-        <div className="flex flex-col gap-6 flex-grow text-white">
+        <div
+          className={
+            'flex flex-col gap-6 flex-grow text-[var(--primary-white)]'
+          }
+        >
           <img
             src={loadedPokemon.image}
             alt={loadedPokemon.name}
@@ -83,7 +87,7 @@ function DetailPanel() {
             setSearchParams(searchParams);
           }}
           title="Close"
-          variant="outline"
+          variant="modal"
         />
       </div>
     </div>
