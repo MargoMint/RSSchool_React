@@ -8,6 +8,11 @@ export interface Pokemon {
   description: string;
 }
 
+export interface BasicPokemon {
+  name: string;
+  url: string;
+}
+
 export interface RawPokemon {
   id: number;
   name: string;

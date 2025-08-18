@@ -8,7 +8,11 @@ const config: Config = {
   },
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.d.ts'],
-  coveragePathIgnorePatterns: ['/node_modules/', 'src/main.tsx'],
+  coveragePathIgnorePatterns: [
+    '/node_modules/',
+    'src/main.tsx',
+    'src/constants/api.ts',
+  ],
   coverageDirectory: 'coverage',
   coverageThreshold: {
     global: {

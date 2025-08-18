@@ -1,17 +1,26 @@
 import CardContainer from './CardContainer';
-import type { Pokemon } from '../types/Pokemon';
+import CardLoader from './CardLoader';
+import type { Pokemon, BasicPokemon } from '../types/Pokemon';
 
 interface CardListProps {
-  cardItems: Pokemon[];
+  cardItems: (Pokemon | BasicPokemon)[];
   onCardClick: (name: string) => void;
 }
 
 function CardList({ cardItems, onCardClick }: CardListProps) {
   return (
     <div className="p-4 grid grid-cols-1 gap-2">
-      {cardItems.map((item) => (
-        <CardContainer key={item.id} pokemon={item} onCardClick={onCardClick} />
-      ))}
+      {cardItems.map((item) =>
+        'url' in item ? (
+          <CardLoader key={item.url} url={item.url} onCardClick={onCardClick} />
+        ) : (
+          <CardContainer
+            key={item.id}
+            pokemon={item}
+            onCardClick={onCardClick}
+          />
+        )
+      )}
     </div>
   );
 }

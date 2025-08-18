@@ -1,28 +1,24 @@
 import DetailPanel from '../components/DetailPanel';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import type { Pokemon } from '../types/Pokemon';
-import { useSearchParams, useOutletContext } from 'react-router-dom';
+import mockPokemon from '../test-utils/mockPokemon';
+import { useSearchParams } from 'react-router-dom';
+import { useGetPokemonQuery } from '../api/pokemonApi';
+import useTheme from '../hooks/useTheme';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useSearchParams: jest.fn(),
-  useOutletContext: jest.fn(),
 }));
 
-describe('DetailPanel', () => {
-  const mockPokemon: Pokemon = {
-    id: 1,
-    name: 'bulbasaur',
-    description: 'overgrow, chlorophyll',
-    image: 'https://example.com/bulbasaur.png',
-    height: 7,
-    weight: 69,
-    types: ['grass', 'poison'],
-  };
+jest.mock('../api/pokemonApi', () => ({
+  useGetPokemonQuery: jest.fn(),
+}));
 
+jest.mock('../hooks/useTheme', () => jest.fn());
+
+describe('DetailPanel', () => {
   const mockSetSearchParams = jest.fn();
-  let mockGetPokemon: jest.Mock;
 
   beforeEach(() => {
     (useSearchParams as jest.Mock).mockReturnValue([
@@ -30,11 +26,7 @@ describe('DetailPanel', () => {
       mockSetSearchParams,
     ]);
 
-    mockGetPokemon = jest.fn();
-
-    (useOutletContext as jest.Mock).mockReturnValue({
-      api: { getPokemon: mockGetPokemon },
-    });
+    (useTheme as jest.Mock).mockReturnValue({ theme: 'light' });
   });
 
   afterEach(() => {
@@ -47,27 +39,39 @@ describe('DetailPanel', () => {
       mockSetSearchParams,
     ]);
 
+    (useGetPokemonQuery as jest.Mock).mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      error: null,
+    });
+
     const { container } = render(<DetailPanel />);
     expect(container).toBeEmptyDOMElement();
   });
 
   test('should render loading state with spinner text', () => {
-    mockGetPokemon.mockImplementation(() => new Promise(() => {}));
+    (useGetPokemonQuery as jest.Mock).mockReturnValue({
+      data: undefined,
+      isLoading: true,
+      error: null,
+    });
 
     render(<DetailPanel />);
     expect(screen.getByText(/loading/i)).toBeInTheDocument();
   });
 
-  test('should render full UI of pokemon after fetch', async () => {
-    mockGetPokemon.mockResolvedValue(mockPokemon);
+  test('should render full UI of pokemon after fetch', () => {
+    (useGetPokemonQuery as jest.Mock).mockReturnValue({
+      data: mockPokemon,
+      isLoading: false,
+      error: null,
+    });
 
     render(<DetailPanel />);
 
-    await waitFor(() => {
-      expect(
-        screen.getByRole('heading', { name: /bulbasaur/i })
-      ).toBeInTheDocument();
-    });
+    expect(
+      screen.getByRole('heading', { name: /bulbasaur/i })
+    ).toBeInTheDocument();
 
     expect(screen.getByAltText('bulbasaur')).toHaveAttribute(
       'src',
@@ -83,18 +87,25 @@ describe('DetailPanel', () => {
     expect(screen.getByText(mockPokemon.description)).toBeInTheDocument();
   });
 
-  test('should handle API errors gracefully', async () => {
-    mockGetPokemon.mockRejectedValue(new Error('API Error'));
+  test('should handle API errors gracefully', () => {
+    (useGetPokemonQuery as jest.Mock).mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      error: new Error('API Error'),
+    });
 
     render(<DetailPanel />);
 
-    await waitFor(() => {
-      expect(screen.queryByText('bulbasaur')).not.toBeInTheDocument();
-    });
+    expect(screen.queryByText('bulbasaur')).not.toBeInTheDocument();
+    expect(screen.getByText(/API Error/i)).toBeInTheDocument();
   });
 
   test('should close the panel when Close button is clicked', async () => {
-    mockGetPokemon.mockResolvedValue(mockPokemon);
+    (useGetPokemonQuery as jest.Mock).mockReturnValue({
+      data: mockPokemon,
+      isLoading: false,
+      error: null,
+    });
 
     render(<DetailPanel />);
 

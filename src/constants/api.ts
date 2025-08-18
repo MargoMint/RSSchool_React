@@ -1,2 +1,1 @@
-export const BASE_URL = 'https://pokeapi.co/api/v2';
-export const POKEMON_ENDPOINT = `${BASE_URL}/pokemon`;
+export const POKEMON_ENDPOINT = 'https://pokeapi.co/api/v2/pokemon';

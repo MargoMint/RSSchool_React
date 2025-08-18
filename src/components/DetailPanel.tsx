@@ -1,36 +1,19 @@
-import { useEffect, useState } from 'react';
-import { useSearchParams, useOutletContext } from 'react-router-dom';
-import Api from '../api/Api';
-import type { Pokemon } from '../types/Pokemon';
+import { useSearchParams } from 'react-router-dom';
 import Button from './Button';
-import { mapPokemon } from '../utils/mapPokemon';
 import StatusMessage from './StatusMessage';
+import { useGetPokemonQuery } from '../api/pokemonApi';
 
 function DetailPanel() {
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedItem = searchParams.get('details');
-  const [loadedPokemon, setLoadedPokemon] = useState<Pokemon | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const { api } = useOutletContext<{ api: Api }>();
 
-  useEffect(() => {
-    setIsLoading(true);
-    setError(null);
-
-    if (selectedItem) {
-      api
-        .getPokemon(selectedItem, mapPokemon)
-        .then((data) => setLoadedPokemon(data))
-        .catch(() => {
-          setLoadedPokemon(null);
-          setError('Failed to load Pokemon details');
-        })
-        .finally(() => setIsLoading(false));
-    } else {
-      setLoadedPokemon(null);
-    }
-  }, [selectedItem, api]);
+  const {
+    data: loadedPokemon,
+    isLoading,
+    error,
+  } = useGetPokemonQuery(selectedItem ?? '', {
+    skip: !selectedItem,
+  });
 
   if (!selectedItem) return null;
 
@@ -39,7 +22,10 @@ function DetailPanel() {
       className="w-full md:w-1/3 max-h-[65vh] rounded-lg mt-4 p-4 bg-red-800 border border-red-400 flex flex-col"
       data-testid="detail-panel"
     >
-      <StatusMessage isLoading={isLoading} error={error} />
+      <StatusMessage
+        isLoading={isLoading}
+        error={error ? error.toString() : null}
+      />
 
       {loadedPokemon && (
         <div

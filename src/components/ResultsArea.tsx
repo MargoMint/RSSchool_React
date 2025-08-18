@@ -12,9 +12,7 @@ function ResultsArea({
   results,
   onCardClick,
 }: ResultsAreaProps) {
-  const showStatus = isLoading || error;
-
-  if (showStatus) {
+  if (isLoading || error) {
     return <StatusMessage isLoading={isLoading} error={error} />;
   }
 
