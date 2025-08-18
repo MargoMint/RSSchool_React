@@ -1,6 +1,7 @@
 import { useGetPokemonByUrlQuery } from '../api/pokemonApi';
-import Card from './Card';
 import StatusMessage from './StatusMessage';
+import CardContainer from './CardContainer';
+import type { Pokemon } from '../types/Pokemon';
 
 interface CardLoaderProps {
   url: string;
@@ -21,7 +22,7 @@ function CardLoader({ url, onCardClick }: CardLoaderProps) {
 
   if (!data) return null;
 
-  return <Card pokemon={data} onCardClick={onCardClick} />;
+  return <CardContainer pokemon={data as Pokemon} onCardClick={onCardClick} />;
 }
 
 export default CardLoader;

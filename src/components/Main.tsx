@@ -8,7 +8,7 @@ import Button from './Button';
 import getValidPage from '../utils/getValidPage';
 import Flyout from './Flyout';
 import { useGetPokemonQuery, useGetAllPokemonsQuery } from '../api/pokemonApi';
-import Card from './Card';
+import CardContainer from './CardContainer';
 import StatusMessage from './StatusMessage';
 
 function Main() {
@@ -82,7 +82,10 @@ function Main() {
                 />
               ) : pokemonData ? (
                 <div className="p-4 grid grid-cols-1 gap-2">
-                  <Card pokemon={pokemonData} onCardClick={handleCardClick} />
+                  <CardContainer
+                    pokemon={pokemonData}
+                    onCardClick={handleCardClick}
+                  />
                 </div>
               ) : null
             ) : (
