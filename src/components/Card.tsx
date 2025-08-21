@@ -1,4 +1,5 @@
 import type { Pokemon } from '../types/Pokemon';
+
 interface CardProps {
   pokemon: Pokemon;
   onCardClick: (name: string) => void;

@@ -1,4 +1,8 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import useTheme from '../hooks/useTheme';
+import Image from 'next/image';
 
 interface IconProps {
   lightThemeIcon: string;
@@ -7,10 +11,19 @@ interface IconProps {
 
 function Icon({ lightThemeIcon, darkThemeIcon }: IconProps) {
   const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   const themeIcon = theme === 'light' ? lightThemeIcon : darkThemeIcon;
 
-  return <img src={themeIcon} alt="theme icon" className="w-8 h-8" />;
+  return <Image src={themeIcon} alt="themeIcon" width={32} height={32} />;
 }
 
 export default Icon;

@@ -1,7 +1,16 @@
 import type { Pokemon } from '../types/Pokemon';
+import { getTranslations } from 'next-intl/server';
 
-function downloadCsv(pokemonList: Pokemon[]) {
-  const fileHeaders = ['Name', 'Height', 'Weight', 'Types', 'Abilities'];
+async function downloadCsv(pokemonList: Pokemon[], locale: string) {
+  const t = await getTranslations({ locale, namespace: 'DetailPanel' });
+
+  const fileHeaders = [
+    t('name'),
+    t('height'),
+    t('weight'),
+    t('types'),
+    t('abilities'),
+  ];
 
   const fileData = pokemonList.map((pokemon) => [
     pokemon.name,
