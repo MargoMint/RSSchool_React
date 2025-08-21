@@ -15,7 +15,7 @@ import {
   useGetPokemonQuery,
   useGetAllPokemonsQuery,
 } from '../../api/pokemonApi';
-import Card from '../../components/Card';
+import CardContainer from '../../components/CardContainer';
 import StatusMessage from '../../components/StatusMessage';
 import DetailPanel from '../../components/DetailPanel';
 import { useTranslations } from 'next-intl';
@@ -100,7 +100,10 @@ function Main() {
                   />
                 ) : pokemonData ? (
                   <div className="p-4 grid grid-cols-1 gap-2">
-                    <Card pokemon={pokemonData} onCardClick={handleCardClick} />
+                    <CardContainer
+                      pokemon={pokemonData}
+                      onCardClick={handleCardClick}
+                    />
                   </div>
                 ) : null
               ) : (
