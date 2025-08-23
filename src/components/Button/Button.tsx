@@ -5,21 +5,32 @@ import type { PropsWithChildren } from 'react';
 type ButtonProps = PropsWithChildren<{
   onClick?: () => void;
   title?: string;
-  variant: 'primary' | 'modal';
+  variant: 'primary' | 'secondary' | 'outline' | 'modal';
+  type?: 'button' | 'submit';
 }>;
 
-function Button({ onClick, title, variant, children }: ButtonProps) {
+function Button({
+  onClick,
+  title,
+  variant,
+  type = 'button',
+  children,
+}: ButtonProps) {
   const buttonClassName = twMerge(
     clsx('rounded-lg px-4 py-2 font-medium hover:cursor-pointer', {
       'text-[var(--primary-white)] bg-[var(--primary-green)]':
         variant === 'primary',
-      'absolute top-3 right-3 text-gray-500 bg-[var(--primary-white)]':
+      'text-[var(--primary-dark)] bg-[var(--primary-pink)] border-2 border-[var(--primary-dark)]':
+        variant === 'secondary',
+      'border-2 border-[var(--primary-green)] text-[var(--primary-green)] bg-transparent':
+        variant === 'outline',
+      'absolute top-3 right-6 text-gray-500 bg-[var(--primary-white)]':
         variant === 'modal',
     })
   );
 
   return (
-    <button onClick={onClick} className={buttonClassName}>
+    <button type={type} onClick={onClick} className={buttonClassName}>
       {children ?? title}
     </button>
   );
