@@ -26,9 +26,10 @@ describe('Modal', () => {
     );
     expect(screen.getByText('Test Title')).toBeInTheDocument();
     expect(screen.getByText('Modal Content')).toBeInTheDocument();
-    await userAction.click(
-      screen.getByRole('dialog').querySelector('.absolute')!
-    );
+    const backdrop = screen.getByRole('dialog').querySelector('.absolute');
+    if (backdrop) {
+      await userAction.click(backdrop);
+    }
     expect(onCloseMock).toHaveBeenCalledTimes(1);
   });
 
