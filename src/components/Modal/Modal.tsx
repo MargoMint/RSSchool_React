@@ -1,7 +1,6 @@
 import type { PropsWithChildren } from 'react';
 import { createPortal } from 'react-dom';
 import { useEscapeClose } from '../../hooks/useEscapeClose';
-import Button from '../Button/Button';
 
 interface ModalProps {
   onClose: () => void;
@@ -20,8 +19,7 @@ const Modal = ({ onClose, children }: PropsWithChildren<ModalProps>) => {
       aria-modal="true"
     >
       <div className="absolute inset-0 bg-black/70 z-40" onClick={onClose} />
-      <div className="relative z-50 bg-[var(--primary-green)] rounded-2xl p-6 w-md">
-        <Button onClick={onClose} title="Close" variant="modal" />
+      <div className="relative z-50 w-xl bg-[var(--primary-green)] rounded-2xl p-6 border-2 border-[var(--primary-dark)]">
         {children}
       </div>
     </div>,
