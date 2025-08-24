@@ -30,7 +30,6 @@ function FormFields({ errors, register }: FormFieldsProps) {
           />
           <ErrorMessage message={errors.name} />
         </div>
-
         <div className={`${FORM_FIELD_WRAPPER} flex-[1]`}>
           <label htmlFor="age" className={FORM_LABEL}>
             Age
@@ -74,7 +73,6 @@ function FormFields({ errors, register }: FormFieldsProps) {
           />
           <ErrorMessage message={errors.password} />
         </div>
-
         <div className={`${FORM_FIELD_WRAPPER} flex-[1]`}>
           <label htmlFor="confirmPassword" className={FORM_LABEL}>
             Confirm Password
@@ -107,7 +105,6 @@ function FormFields({ errors, register }: FormFieldsProps) {
           </select>
           <ErrorMessage message={errors.gender} />
         </div>
-
         <div className={`${FORM_FIELD_WRAPPER} flex-[2]`}>
           <label htmlFor="country" className={FORM_LABEL}>
             Country
