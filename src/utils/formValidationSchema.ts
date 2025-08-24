@@ -39,16 +39,18 @@ const formValidationSchema = yup.object({
     .oneOf([true], 'Terms and Conditions must be accepted')
     .required('Terms and Conditions are required'),
   picture: yup
-    .mixed<File>()
+    .mixed<FileList>()
     .required('Picture is required')
     .test('fileSize', 'The file is too large (max 20 MB)', (value) => {
-      return value && value.size <= 20 * 1024 * 1024;
+      if (!value || value.length === 0) return false;
+      return value[0].size <= 20 * 1024 * 1024;
     })
     .test(
       'fileFormat',
       'Unsupported file format. Only .jpeg and .png are allowed',
       (value) => {
-        return value && ['image/jpeg', 'image/png'].includes(value.type);
+        if (!value || value.length === 0) return false;
+        return ['image/jpeg', 'image/png'].includes(value[0].type);
       }
     ),
   country: yup.string().required('Country is required'),
