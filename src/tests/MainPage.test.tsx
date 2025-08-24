@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MainPage } from '../pages/MainPage';
@@ -45,7 +45,7 @@ vi.spyOn(hooks, 'useAppSelector').mockImplementation((selector) => {
 });
 
 describe('MainPage', () => {
-  it('renders buttons', () => {
+  test('renders buttons', () => {
     render(<MainPage />);
     expect(
       screen.getByRole('button', { name: /Open Uncontrolled Form/i })
@@ -55,13 +55,13 @@ describe('MainPage', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders submissions as ListItemOfForm components', () => {
+  test('renders submissions as ListItemOfForm components', () => {
     render(<MainPage />);
     expect(screen.getByText('Rita Match')).toBeInTheDocument();
     expect(screen.getByText('Eva Smith')).toBeInTheDocument();
   });
 
-  it('opens uncontrolled modal on button click', async () => {
+  test('opens uncontrolled modal on button click', async () => {
     const user = userEvent.setup();
     render(<MainPage />);
     const btn = screen.getByRole('button', { name: /Open Uncontrolled Form/i });
@@ -71,7 +71,7 @@ describe('MainPage', () => {
     expect(within(modal).getByText(/uncontrolled form/i)).toBeInTheDocument();
   });
 
-  it('opens controlled modal on button click', async () => {
+  test('opens controlled modal on button click', async () => {
     const user = userEvent.setup();
     render(<MainPage />);
     const btn = screen.getByRole('button', { name: /Open Controlled Form/i });

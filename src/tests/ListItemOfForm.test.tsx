@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import ListItemOfForm from '../components/ListItemOfForm';
 
@@ -14,13 +14,13 @@ const mockData = {
 };
 
 describe('ListItemOfForm', () => {
-  it('renders without crashing', () => {
+  test('renders without crashing', () => {
     render(<ListItemOfForm data={mockData} />);
     const nameElement = screen.getByText('Rita Match');
     expect(nameElement).toBeInTheDocument();
   });
 
-  it('displays all data correctly', () => {
+  test('displays all data correctly', () => {
     render(<ListItemOfForm data={mockData} />);
     expect(screen.getByText('Rita Match')).toBeInTheDocument();
     expect(screen.getByText('Age: 23')).toBeInTheDocument();
@@ -29,7 +29,7 @@ describe('ListItemOfForm', () => {
     expect(screen.getByText('Gender: Female')).toBeInTheDocument();
   });
 
-  it('renders image with correct src and alt', () => {
+  test('renders image with correct src and alt', () => {
     render(<ListItemOfForm data={mockData} />);
     const imgElement = screen.getByAltText(
       'Rita Match img'
@@ -38,7 +38,7 @@ describe('ListItemOfForm', () => {
     expect(imgElement.src).toContain('rita.png');
   });
 
-  it('applies correct background class when isNew is true', () => {
+  test('applies correct background class when isNew is true', () => {
     const { container } = render(<ListItemOfForm data={mockData} isNew />);
     const outerDiv = container.firstChild as HTMLElement;
     expect(outerDiv).toHaveClass('bg-[var(--primary-pink)]');

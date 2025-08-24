@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, expect, vi } from 'vitest';
 import Modal from '../components/Modal/Modal';
 import userEvent from '@testing-library/user-event';
 
@@ -16,7 +16,7 @@ describe('Modal', () => {
     document.body.removeChild(portalRoot);
   });
 
-  it('should render the modal and close on backdrop click', async () => {
+  test('should render the modal and close on backdrop click', async () => {
     const userAction = userEvent.setup();
     const onCloseMock = vi.fn();
     render(
@@ -33,7 +33,7 @@ describe('Modal', () => {
     expect(onCloseMock).toHaveBeenCalledTimes(1);
   });
 
-  it('should close the modal when the ESC key is pressed', async () => {
+  test('should close the modal when the ESC key is pressed', async () => {
     const userAction = userEvent.setup();
     const onCloseMock = vi.fn();
     render(
@@ -45,7 +45,7 @@ describe('Modal', () => {
     expect(onCloseMock).toHaveBeenCalledTimes(1);
   });
 
-  it('should render the modal content inside the portal element', () => {
+  test('should render the modal content inside the portal element', () => {
     const onCloseMock = vi.fn();
     render(
       <Modal onClose={onCloseMock} title="Test Title">
