@@ -7,6 +7,7 @@ type ButtonProps = PropsWithChildren<{
   title?: string;
   variant: 'primary' | 'secondary' | 'outline' | 'modal';
   type?: 'button' | 'submit';
+  disabled?: boolean;
 }>;
 
 function Button({
@@ -14,6 +15,7 @@ function Button({
   title,
   variant,
   type = 'button',
+  disabled = false,
   children,
 }: ButtonProps) {
   const buttonClassName = twMerge(
@@ -30,7 +32,12 @@ function Button({
   );
 
   return (
-    <button type={type} onClick={onClick} className={buttonClassName}>
+    <button
+      type={type}
+      onClick={onClick}
+      className={buttonClassName}
+      disabled={disabled}
+    >
       {children ?? title}
     </button>
   );
