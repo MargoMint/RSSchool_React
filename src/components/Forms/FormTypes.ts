@@ -6,7 +6,7 @@ export interface FormTypes {
   confirmPassword: string;
   gender: string;
   country: string;
-  picture: FileList;
+  picture: File | FileList | File[] | string | undefined;
   acceptTermsAndCondition: boolean;
 }
 

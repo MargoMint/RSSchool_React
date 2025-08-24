@@ -1,4 +1,7 @@
 import * as yup from 'yup';
+import extractFirstFile from './extractFirstFile';
+
+const MAX_BYTES = 20 * 1024 * 1024;
 
 const formValidationSchema = yup.object({
   name: yup
@@ -39,18 +42,20 @@ const formValidationSchema = yup.object({
     .oneOf([true], 'Terms and Conditions must be accepted')
     .required('Terms and Conditions are required'),
   picture: yup
-    .mixed<FileList>()
+    .mixed()
     .required('Picture is required')
     .test('fileSize', 'The file is too large (max 20 MB)', (value) => {
-      if (!value || value.length === 0) return false;
-      return value[0].size <= 20 * 1024 * 1024;
+      const file = extractFirstFile(value);
+      if (!file) return false;
+      return file.size <= MAX_BYTES;
     })
     .test(
       'fileFormat',
       'Unsupported file format. Only .jpeg and .png are allowed',
       (value) => {
-        if (!value || value.length === 0) return false;
-        return ['image/jpeg', 'image/png'].includes(value[0].type);
+        const file = extractFirstFile(value);
+        if (!file) return false;
+        return ['image/jpeg', 'image/png'].includes(file.type);
       }
     ),
   country: yup.string().required('Country is required'),

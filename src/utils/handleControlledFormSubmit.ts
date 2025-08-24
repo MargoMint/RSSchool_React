@@ -15,9 +15,27 @@ async function handleControlledFormSubmit(
     acceptTermsAndCondition: data.acceptTermsAndCondition,
   };
 
-  if (data.picture && data.picture.length > 0) {
-    const file = data.picture[0];
-    values.picture = await processFileToBase64(file);
+  const picture = data.picture;
+
+  if (picture) {
+    let fileToProcess: File | null = null;
+    if (picture instanceof File) {
+      fileToProcess = picture;
+    } else if (typeof FileList !== 'undefined' && picture instanceof FileList) {
+      if (picture.length > 0) fileToProcess = picture[0];
+    } else if (
+      Array.isArray(picture) &&
+      picture.length > 0 &&
+      picture[0] instanceof File
+    ) {
+      fileToProcess = picture[0];
+    } else if (typeof picture === 'string') {
+      values.picture = picture;
+    }
+
+    if (fileToProcess) {
+      values.picture = await processFileToBase64(fileToProcess);
+    }
   } else {
     values.picture = undefined;
   }
