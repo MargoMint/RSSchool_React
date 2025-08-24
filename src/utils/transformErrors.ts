@@ -1,6 +1,6 @@
 import type { FieldErrors, FieldError } from 'react-hook-form';
 import type { FormErrors } from './validateFormData';
-import type { FormTypes } from '../components/Forms/formTypes';
+import type { FormTypes } from '../components/Forms/FormTypes';
 
 function transformErrors(errors: FieldErrors<FormTypes>): FormErrors {
   const result: FormErrors = {};

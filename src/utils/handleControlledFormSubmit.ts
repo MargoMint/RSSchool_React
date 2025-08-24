@@ -1,5 +1,5 @@
 import processFileToBase64 from './processFileToBase64';
-import type { FormTypes } from '../components/Forms/formTypes';
+import type { FormTypes } from '../components/Forms/FormTypes';
 
 async function handleControlledFormSubmit(
   data: FormTypes

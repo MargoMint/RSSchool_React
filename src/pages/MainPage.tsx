@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import Modal from '../components/Modal/Modal';
 import Button from '../components/Button/Button';
-import UncontrolledForm from '../components/Forms/UncontrolledForm';
-import ControlledForm from '../components/Forms/ControlledForm';
+import UncontrolledForm from '../components/Forms/UncontrolledForm/UncontrolledForm';
+import ControlledForm from '../components/Forms/ControlledForm/ControlledForm';
 import HeroImage from '../components/HeroImage';
 import Layout from '../components/Layout/Layout';
 import handleFormSubmission from '../utils/handleFormSubmission';

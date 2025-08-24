@@ -1,4 +1,4 @@
-import type { StoredFormData } from './Forms/formTypes';
+import type { StoredFormData } from './Forms/FormTypes';
 
 interface ListItemOfFormProps {
   data: StoredFormData;

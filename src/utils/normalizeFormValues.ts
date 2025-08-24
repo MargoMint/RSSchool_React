@@ -1,5 +1,5 @@
 import processFileToBase64 from './processFileToBase64';
-import type { StoredFormData } from '../components/Forms/formTypes';
+import type { StoredFormData } from '../components/Forms/FormTypes';
 
 export default async function normalizeFormValues(
   values: Record<string, unknown>

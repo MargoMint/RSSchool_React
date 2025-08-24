@@ -1,7 +1,7 @@
 import normalizeFormValues from './normalizeFormValues';
 import { addSubmission } from '../store/formSlice';
 import { store } from '../store/store';
-import type { StoredFormData } from '../components/Forms/formTypes';
+import type { StoredFormData } from '../components/Forms/FormTypes';
 
 export default async function handleFormSubmission(
   values: Record<string, unknown>
