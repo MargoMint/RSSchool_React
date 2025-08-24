@@ -8,7 +8,7 @@ function transformErrors(errors: FieldErrors<FormTypes>): FormErrors {
     const fieldKey = key as keyof FieldErrors<FormTypes>;
     const err = errors[fieldKey] as FieldError | undefined;
     if (err?.message) {
-      result[key] = String(err.message);
+      result[key] = err.message.toString();
     }
   }
   return result;
