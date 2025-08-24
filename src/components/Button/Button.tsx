@@ -18,7 +18,7 @@ function Button({
 }: ButtonProps) {
   const buttonClassName = twMerge(
     clsx('rounded-lg px-4 py-2 font-medium hover:cursor-pointer', {
-      'text-[var(--primary-white)] bg-[var(--primary-green)]':
+      'text-[var(--primary-white)] bg-[var(--primary-green)] border-2 border-[var(--primary-green)]':
         variant === 'primary',
       'text-[var(--primary-dark)] bg-[var(--primary-pink)] border-2 border-[var(--primary-dark)]':
         variant === 'secondary',
