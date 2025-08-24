@@ -7,6 +7,7 @@ const formValidationSchema = yup.object({
     .required('Name is required'),
   age: yup
     .number()
+    .typeError('Age must be a number')
     .positive('Age should not have a negative value')
     .integer('Age must be an integer')
     .required('Age is required'),
@@ -25,7 +26,7 @@ const formValidationSchema = yup.object({
     .matches(/(?=.*[0-9])/, 'Password must contain at least one number')
     .matches(
       /(?=.*[!@#$%^&*])/,
-      'Password must contain at least one special character (!@#$%^&*)'
+      'Password must contain at least one special character'
     )
     .required('Password is required'),
   confirmPassword: yup
