@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react';
 import { createPortal } from 'react-dom';
-import { useEscapeClose } from '../../hooks/useEscapeClose';
+import { useEscapeClose } from '../hooks/useEscapeClose';
 
 interface ModalProps {
   onClose: () => void;

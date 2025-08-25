@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import extractFirstFile from './extractFirstFile';
+import countriesList from '../data/countries';
 
 const MAX_BYTES = 20 * 1024 * 1024;
 
@@ -58,7 +59,7 @@ const formValidationSchema = yup.object({
         return ['image/jpeg', 'image/png'].includes(file.type);
       }
     ),
-  country: yup.string().required('Country is required'),
+  country: yup.string().required().oneOf(countriesList, 'Select your country'),
 });
 
 export default formValidationSchema;

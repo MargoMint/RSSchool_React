@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import Modal from '../components/Modal/Modal';
-import Button from '../components/Button/Button';
-import UncontrolledForm from '../components/Forms/UncontrolledForm/UncontrolledForm';
-import ControlledForm from '../components/Forms/ControlledForm/ControlledForm';
+import Modal from '../components/Modal';
+import Button from '../components/Button';
+import UncontrolledForm from '../components/Forms/UncontrolledForm';
+import ControlledForm from '../components/Forms/ControlledForm';
 import HeroImage from '../components/HeroImage';
-import Layout from '../components/Layout/Layout';
+import Layout from '../components/Layout';
 import handleFormSubmission from '../utils/handleFormSubmission';
 import { useAppSelector } from '../store/hooks';
 import { selectSubmissions } from '../store/formSelectors';
-import ListItemOfForm from '../components/ListItemOfForm';
+import SubmissionsList from '../components/SubmissionsList';
 
 export const MainPage = () => {
   const [ModalOpen, setModalOpen] = useState<
@@ -61,11 +61,7 @@ export const MainPage = () => {
 
       <HeroImage />
 
-      <div className="mt-6 grid gap-4">
-        {submissions.map((item, index) => (
-          <ListItemOfForm key={index} data={item} isNew={index === 0} />
-        ))}
-      </div>
+      <SubmissionsList submissions={submissions} />
     </Layout>
   );
 };
