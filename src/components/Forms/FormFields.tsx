@@ -1,5 +1,5 @@
 import Input from '../Input';
-import ErrorMessage from '../../utils/ErrorMessage';
+import ErrorMessage from '../ErrorMessage';
 
 const FORM_FIELD_WRAPPER = 'flex flex-col';
 const FORM_LABEL = 'font-bold text-[var(--primary-pink)] mb-1';
