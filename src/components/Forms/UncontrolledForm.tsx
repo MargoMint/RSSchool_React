@@ -1,8 +1,8 @@
 import { useState, type FormEvent } from 'react';
-import Button from '../../Button/Button';
-import FormFields from '../FormFields';
-import type { FormErrors } from '../../../utils/validateFormData';
-import handleUncontrolledFormSubmit from '../../../utils/handleUncontrolledFormSubmit';
+import Button from '../Button';
+import FormFields from './FormFields';
+import type { FormErrors } from '../../utils/validateFormData';
+import handleUncontrolledFormSubmit from '../../utils/handleUncontrolledFormSubmit';
 
 interface UncontrolledFormProps {
   onSubmit: (values: Record<string, unknown>) => void;

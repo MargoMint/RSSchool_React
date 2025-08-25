@@ -1,12 +1,12 @@
 import { useForm } from 'react-hook-form';
 import type { Resolver } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import Button from '../../Button/Button';
-import FormFields from '../FormFields';
-import formValidationSchema from '../../../utils/formValidationSchema';
-import type { FormTypes } from '../FormTypes';
-import handleControlledFormSubmit from '../../../utils/handleControlledFormSubmit';
-import transformErrors from '../../../utils/transformErrors';
+import Button from '../Button';
+import FormFields from './FormFields';
+import formValidationSchema from '../../utils/formValidationSchema';
+import type { FormTypes } from './FormTypes';
+import handleControlledFormSubmit from '../../utils/handleControlledFormSubmit';
+import transformErrors from '../../utils/transformErrors';
 
 interface ControlledFormProps {
   onSubmit: (values: Record<string, unknown>) => void;

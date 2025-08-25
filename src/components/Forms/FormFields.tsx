@@ -1,4 +1,4 @@
-import Input from '../Input/Input';
+import Input from '../Input';
 import ErrorMessage from '../../utils/ErrorMessage';
 
 const FORM_FIELD_WRAPPER = 'flex flex-col';

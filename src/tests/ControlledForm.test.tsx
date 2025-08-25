@@ -1,7 +1,7 @@
 import { describe, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import ControlledForm from '../components/Forms/ControlledForm/ControlledForm';
+import ControlledForm from '../components/Forms/ControlledForm';
 
 const mockOnSubmit = vi.fn();
 const mockOnClose = vi.fn();
