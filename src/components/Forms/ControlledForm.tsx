@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import type { Resolver } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Button from '../Button';
@@ -17,6 +17,7 @@ function ControlledForm({ onSubmit, onClose }: ControlledFormProps) {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isValid, isSubmitting },
   } = useForm<FormTypes>({
     resolver: yupResolver(formValidationSchema) as unknown as Resolver<
@@ -37,6 +38,12 @@ function ControlledForm({ onSubmit, onClose }: ControlledFormProps) {
     },
   });
 
+  const passwordValue = useWatch({
+    control,
+    name: 'password',
+    defaultValue: '',
+  });
+
   const reg = (name: string) => {
     if (name === 'age') return register('age', { valueAsNumber: true });
     if (name === 'picture') return register('picture' as keyof FormTypes);
@@ -53,7 +60,11 @@ function ControlledForm({ onSubmit, onClose }: ControlledFormProps) {
 
   return (
     <form onSubmit={submit} noValidate>
-      <FormFields errors={mappedErrors} register={reg} />
+      <FormFields
+        errors={mappedErrors}
+        register={reg}
+        passwordValue={passwordValue}
+      />
       <div className="flex justify-center gap-3 mt-4">
         <Button variant="secondary" onClick={onClose} title="Close" />
         <Button

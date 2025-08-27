@@ -11,6 +11,7 @@ interface UncontrolledFormProps {
 
 function UncontrolledForm({ onSubmit, onClose }: UncontrolledFormProps) {
   const [errors, setErrors] = useState<FormErrors>({});
+  const [password, setPassword] = useState('');
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -25,9 +26,17 @@ function UncontrolledForm({ onSubmit, onClose }: UncontrolledFormProps) {
     }
   };
 
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
   return (
     <form onSubmit={handleSubmit}>
-      <FormFields errors={errors} />
+      <FormFields
+        errors={errors}
+        passwordValue={password}
+        onPasswordChange={handlePasswordChange}
+      />
       <div className="flex justify-center gap-3 mt-4">
         <Button variant="secondary" onClick={onClose} title="Close" />
         <Button variant="secondary" type="submit" title="Submit" />
