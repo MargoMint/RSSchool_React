@@ -6,7 +6,7 @@ function Spinner() {
       <HeroImage />
       <div className="flex items-center gap-3">
         <div className="h-5 w-5 animate-spin rounded-full border-3 border-[var(--primary-dark)] border-t-transparent" />
-        <span>Loading data</span>
+        <span className="font-decor text-2xl">Loading data</span>
       </div>
     </div>
   );
