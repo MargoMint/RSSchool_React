@@ -1,12 +1,12 @@
-import type { CountryData, YearlyRecord } from '../types/CountryDataTypes';
-import { useState, useMemo } from 'react';
+import type { CountryData } from '../types/CountryDataTypes';
+import { useState, useMemo, useCallback } from 'react';
 import sortedCountries from '../utils/sortedCountries';
 import sort from '../assets/sort.png';
 import useHighlightedRows from '../hooks/useHighlightedRows';
 import Search from './Search';
+import TableRow from './TableRow';
 
 const TH_BASE = 'border px-2 py-1 font-decor text-xl text-left';
-const TD_BASE = 'border px-2 py-1 text-center';
 
 interface CountryTableProps {
   data: Record<string, CountryData>;
@@ -39,22 +39,33 @@ function CountryTable({ data }: CountryTableProps) {
     );
   };
 
-  const countriesToDisplay =
-    sortMethod === 'none'
-      ? countries
-      : sortedCountries({ countries, selectedYear, order: sortMethod });
+  const countriesToDisplay = useMemo(
+    () =>
+      sortMethod === 'none'
+        ? countries
+        : sortedCountries({ countries, selectedYear, order: sortMethod }),
+    [countries, selectedYear, sortMethod]
+  );
 
-  const normalizedQuery = searchValue.toLowerCase();
-  const filteredCountries =
-    normalizedQuery.length === 0
+  const filteredCountries = useMemo(() => {
+    const normalizedQuery = searchValue.toLowerCase();
+    return normalizedQuery.length === 0
       ? countriesToDisplay
       : countriesToDisplay.filter(([countryName]) =>
           countryName.toLowerCase().includes(normalizedQuery)
         );
+  }, [countriesToDisplay, searchValue]);
 
   const onSearch = (term: string) => {
     setSearchValue(term);
   };
+
+  const handleYearChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setSelectedYear(+e.target.value);
+    },
+    []
+  );
 
   return (
     <div className="flex justify-center items-center py-10">
@@ -69,7 +80,7 @@ function CountryTable({ data }: CountryTableProps) {
               <select
                 className="bg-transparent w-full font-decor"
                 value={selectedYear}
-                onChange={(e) => setSelectedYear(+e.target.value)}
+                onChange={handleYearChange}
               >
                 {allYears.map((year) => (
                   <option key={year} value={year}>
@@ -92,54 +103,16 @@ function CountryTable({ data }: CountryTableProps) {
           </tr>
         </thead>
         <tbody>
-          {filteredCountries.map(([countryName, countryData]) => {
-            const rowForYear: YearlyRecord | undefined = countryData.data.find(
-              (row) => row.year === selectedYear
-            );
-            const flags = updatedMap.get(countryName);
-            const popChanged = flags?.population ?? false;
-            const co2Changed = flags?.co2 ?? false;
-            const perCapitaChanged = flags?.co2_per_capita ?? false;
-
-            return (
-              <tr key={countryName}>
-                <td className="border px-2 py-1 truncate">{countryName}</td>
-                <td className={TD_BASE}>{countryData.iso_code ?? 'N/A'}</td>
-
-                <td
-                  className={`${TD_BASE} transition-colors duration-700 ${
-                    yearChanged ? 'bg-[var(--primary)]' : 'bg-transparent'
-                  }`}
-                >
-                  {selectedYear}
-                </td>
-
-                <td
-                  className={`${TD_BASE} transition-colors duration-700 ${
-                    popChanged ? 'bg-[var(--primary)]' : 'bg-transparent'
-                  }`}
-                >
-                  {rowForYear?.population ?? 'N/A'}
-                </td>
-
-                <td
-                  className={`${TD_BASE} transition-colors duration-700 ${
-                    co2Changed ? 'bg-[var(--primary)]' : 'bg-transparent'
-                  }`}
-                >
-                  {rowForYear?.co2 ?? 'N/A'}
-                </td>
-
-                <td
-                  className={`${TD_BASE} transition-colors duration-700 ${
-                    perCapitaChanged ? 'bg-[var(--primary)]' : 'bg-transparent'
-                  }`}
-                >
-                  {rowForYear?.co2_per_capita ?? 'N/A'}
-                </td>
-              </tr>
-            );
-          })}
+          {filteredCountries.map(([countryName, countryData]) => (
+            <TableRow
+              key={countryName}
+              countryName={countryName}
+              countryData={countryData}
+              selectedYear={selectedYear}
+              updatedMap={updatedMap}
+              yearChanged={yearChanged}
+            />
+          ))}
         </tbody>
       </table>
     </div>
