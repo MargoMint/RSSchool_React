@@ -3,14 +3,16 @@ import type { CountryData } from '../types/CountryDataTypes';
 interface sortedCountriesProps {
   countries: [string, CountryData][];
   selectedYear: number;
-  order: 'asc' | 'desc';
+  order?: 'none' | 'asc' | 'desc';
 }
 
 function sortedCountries({
   countries,
   selectedYear,
-  order,
+  order = 'none',
 }: sortedCountriesProps) {
+  if (order === 'none') return countries;
+
   return countries.slice().sort((a, b) => {
     const popA =
       a[1].data.find((row) => row.year === selectedYear)?.population ?? 0;

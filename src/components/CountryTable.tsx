@@ -2,6 +2,7 @@ import type { CountryData, YearlyRecord } from '../types/CountryDataTypes';
 import { useState, useMemo } from 'react';
 import sortedCountries from '../utils/sortedCountries';
 import sort from '../assets/sort.png';
+import useHighlightedRows from '../hooks/useHighlightedRows';
 
 const TH_BASE = 'border px-2 py-1 font-decor text-xl text-left';
 const TD_BASE = 'border px-2 py-1 text-center';
@@ -11,7 +12,7 @@ interface CountryTableProps {
 }
 
 function CountryTable({ data }: CountryTableProps) {
-  const countries = Object.entries(data);
+  const countries = useMemo(() => Object.entries(data), [data]);
 
   const allYears = useMemo(() => {
     const firstCountry = countries[0]?.[1];
@@ -22,10 +23,14 @@ function CountryTable({ data }: CountryTableProps) {
     allYears[allYears.length - 1]
   );
 
-  const [sortMethod, setsortMethod] = useState<'none' | 'asc' | 'desc'>('none');
+  const { updatedMap, yearChanged } = useHighlightedRows(
+    countries,
+    selectedYear
+  );
 
+  const [sortMethod, setSortMethod] = useState<'none' | 'asc' | 'desc'>('none');
   const handleSortClick = () => {
-    setsortMethod((prev) =>
+    setSortMethod((prev) =>
       prev === 'none' ? 'desc' : prev === 'desc' ? 'asc' : 'none'
     );
   };
@@ -38,7 +43,7 @@ function CountryTable({ data }: CountryTableProps) {
   return (
     <div className="flex justify-center items-center py-10">
       <table className="min-w-5xl text-sm table-fixed">
-        <thead className="bg-[var(--primary)]">
+        <thead className="bg-[var(--primary-dark)]">
           <tr>
             <th className={`${TH_BASE} w-40`}>Country</th>
             <th className={`${TH_BASE} w-20`}>ISO code</th>
@@ -73,18 +78,45 @@ function CountryTable({ data }: CountryTableProps) {
             const rowForYear: YearlyRecord | undefined = countryData.data.find(
               (row) => row.year === selectedYear
             );
+            const flags = updatedMap.get(countryName);
+            const popChanged = flags?.population ?? false;
+            const co2Changed = flags?.co2 ?? false;
+            const perCapitaChanged = flags?.co2_per_capita ?? false;
 
             return (
-              <tr
-                key={countryData.iso_code ?? countryName}
-                className="border-t"
-              >
+              <tr key={countryName}>
                 <td className="border px-2 py-1 truncate">{countryName}</td>
                 <td className={TD_BASE}>{countryData.iso_code ?? 'N/A'}</td>
-                <td className={TD_BASE}>{selectedYear}</td>
-                <td className={TD_BASE}>{rowForYear?.population ?? 'N/A'}</td>
-                <td className={TD_BASE}>{rowForYear?.co2 ?? 'N/A'}</td>
-                <td className={TD_BASE}>
+
+                <td
+                  className={`${TD_BASE} transition-colors duration-700 ${
+                    yearChanged ? 'bg-[var(--primary)]' : 'bg-transparent'
+                  }`}
+                >
+                  {selectedYear}
+                </td>
+
+                <td
+                  className={`${TD_BASE} transition-colors duration-700 ${
+                    popChanged ? 'bg-[var(--primary)]' : 'bg-transparent'
+                  }`}
+                >
+                  {rowForYear?.population ?? 'N/A'}
+                </td>
+
+                <td
+                  className={`${TD_BASE} transition-colors duration-700 ${
+                    co2Changed ? 'bg-[var(--primary)]' : 'bg-transparent'
+                  }`}
+                >
+                  {rowForYear?.co2 ?? 'N/A'}
+                </td>
+
+                <td
+                  className={`${TD_BASE} transition-colors duration-700 ${
+                    perCapitaChanged ? 'bg-[var(--primary)]' : 'bg-transparent'
+                  }`}
+                >
                   {rowForYear?.co2_per_capita ?? 'N/A'}
                 </td>
               </tr>
@@ -95,4 +127,5 @@ function CountryTable({ data }: CountryTableProps) {
     </div>
   );
 }
+
 export default CountryTable;
