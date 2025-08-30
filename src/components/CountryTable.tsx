@@ -3,6 +3,7 @@ import { useState, useMemo } from 'react';
 import sortedCountries from '../utils/sortedCountries';
 import sort from '../assets/sort.png';
 import useHighlightedRows from '../hooks/useHighlightedRows';
+import Search from './Search';
 
 const TH_BASE = 'border px-2 py-1 font-decor text-xl text-left';
 const TD_BASE = 'border px-2 py-1 text-center';
@@ -13,6 +14,8 @@ interface CountryTableProps {
 
 function CountryTable({ data }: CountryTableProps) {
   const countries = useMemo(() => Object.entries(data), [data]);
+
+  const [searchValue, setSearchValue] = useState<string>('');
 
   const allYears = useMemo(() => {
     const firstCountry = countries[0]?.[1];
@@ -29,6 +32,7 @@ function CountryTable({ data }: CountryTableProps) {
   );
 
   const [sortMethod, setSortMethod] = useState<'none' | 'asc' | 'desc'>('none');
+
   const handleSortClick = () => {
     setSortMethod((prev) =>
       prev === 'none' ? 'desc' : prev === 'desc' ? 'asc' : 'none'
@@ -40,12 +44,26 @@ function CountryTable({ data }: CountryTableProps) {
       ? countries
       : sortedCountries({ countries, selectedYear, order: sortMethod });
 
+  const normalizedQuery = searchValue.toLowerCase();
+  const filteredCountries =
+    normalizedQuery.length === 0
+      ? countriesToDisplay
+      : countriesToDisplay.filter(([countryName]) =>
+          countryName.toLowerCase().includes(normalizedQuery)
+        );
+
+  const onSearch = (term: string) => {
+    setSearchValue(term);
+  };
+
   return (
     <div className="flex justify-center items-center py-10">
       <table className="min-w-5xl text-sm table-fixed">
         <thead className="bg-[var(--primary-dark)]">
           <tr>
-            <th className={`${TH_BASE} w-40`}>Country</th>
+            <th className={`${TH_BASE} w-40`}>
+              Country <Search onSearch={onSearch} />
+            </th>
             <th className={`${TH_BASE} w-20`}>ISO code</th>
             <th className={`${TH_BASE} w-28`}>
               <select
@@ -74,7 +92,7 @@ function CountryTable({ data }: CountryTableProps) {
           </tr>
         </thead>
         <tbody>
-          {countriesToDisplay.map(([countryName, countryData]) => {
+          {filteredCountries.map(([countryName, countryData]) => {
             const rowForYear: YearlyRecord | undefined = countryData.data.find(
               (row) => row.year === selectedYear
             );
