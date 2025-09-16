@@ -6,7 +6,8 @@ import useHighlightedRows from '../hooks/useHighlightedRows';
 import Search from './Search';
 import TableRow from './TableRow';
 import type { ChangeEvent } from 'react';
-import { getAllYears } from '../utils/getAllYears';
+import getAllYears from '../utils/getAllYears';
+import filterCountries from '../utils/filterCountries';
 
 enum SortMethod {
   NONE = 'none',
@@ -56,14 +57,10 @@ function CountryTable({ data }: CountryTableProps) {
     [countries, selectedYear, sortMethod]
   );
 
-  const filteredCountries = useMemo(() => {
-    const normalizedQuery = searchValue.toLowerCase();
-    return normalizedQuery.length === 0
-      ? countriesToDisplay
-      : countriesToDisplay.filter(([countryName]) =>
-          countryName.toLowerCase().includes(normalizedQuery)
-        );
-  }, [countriesToDisplay, searchValue]);
+  const filteredCountries = useMemo(
+    () => filterCountries(countriesToDisplay, searchValue),
+    [countriesToDisplay, searchValue]
+  );
 
   const onSearch = (term: string) => {
     setSearchValue(term);
