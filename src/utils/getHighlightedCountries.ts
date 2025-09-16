@@ -6,7 +6,7 @@ export interface UpdatedFlags {
   co2_per_capita: boolean;
 }
 
-function valuesEqual(a: number | undefined, b: number | undefined): boolean {
+function areValuesEqual(a: number | undefined, b: number | undefined): boolean {
   if (a === undefined && b === undefined) return true;
   if (a === undefined || b === undefined) return false;
   return Number(a) === Number(b);
@@ -23,12 +23,12 @@ function getHighlightedCountries(
     const prevRow = countryData.data.find((row) => row.year === prevYear);
     const currRow = countryData.data.find((row) => row.year === selectedYear);
 
-    const populationChanged = !valuesEqual(
+    const populationChanged = !areValuesEqual(
       prevRow?.population,
       currRow?.population
     );
-    const co2Changed = !valuesEqual(prevRow?.co2, currRow?.co2);
-    const co2PerCapitaChanged = !valuesEqual(
+    const co2Changed = !areValuesEqual(prevRow?.co2, currRow?.co2);
+    const co2PerCapitaChanged = !areValuesEqual(
       prevRow?.co2_per_capita,
       currRow?.co2_per_capita
     );
