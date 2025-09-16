@@ -1,6 +1,6 @@
 import type { CountryData } from '../types/CountryDataTypes';
 import { useState, useMemo, useCallback } from 'react';
-import sortedCountries from '../utils/sortedCountries';
+import getSortedCountries from '../utils/getSortedCountries';
 import sort from '../assets/sort.png';
 import useHighlightedRows from '../hooks/useHighlightedRows';
 import Search from './Search';
@@ -54,7 +54,7 @@ function CountryTable({ data }: CountryTableProps) {
     () =>
       sortMethod === SortMethod.NONE
         ? countries
-        : sortedCountries({ countries, selectedYear, order: sortMethod }),
+        : getSortedCountries({ countries, selectedYear, order: sortMethod }),
     [countries, selectedYear, sortMethod]
   );
 

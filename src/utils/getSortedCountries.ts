@@ -6,7 +6,7 @@ interface sortedCountriesProps {
   order?: 'none' | 'asc' | 'desc';
 }
 
-function sortedCountries({
+function getSortedCountries({
   countries,
   selectedYear,
   order = 'none',
@@ -23,4 +23,4 @@ function sortedCountries({
   });
 }
 
-export default sortedCountries;
+export default getSortedCountries;
