@@ -1,9 +1,9 @@
 import type { CountryData, YearlyRecord } from '../types/CountryDataTypes';
 import type { UpdatedFlags } from '../utils/getHighlightedCountries';
 import { memo } from 'react';
+import clsx from 'clsx';
 
 const TD_BASE = 'border px-2 py-1 text-center';
-
 interface TableRowProps {
   countryName: string;
   countryData: CountryData;
@@ -33,30 +33,34 @@ const TableRow = memo(
         <td className="border px-2 py-1 truncate">{countryName}</td>
         <td className={TD_BASE}>{countryData.iso_code ?? 'N/A'}</td>
         <td
-          className={`${TD_BASE} transition-colors duration-700 ${
-            yearChanged ? 'bg-[var(--primary)]' : 'bg-transparent'
-          }`}
+          className={clsx(TD_BASE, 'transition-colors duration-700', {
+            'bg-[var(--primary)]': yearChanged,
+            'bg-transparent': !yearChanged,
+          })}
         >
           {selectedYear}
         </td>
         <td
-          className={`${TD_BASE} transition-colors duration-700 ${
-            popChanged ? 'bg-[var(--primary)]' : 'bg-transparent'
-          }`}
+          className={clsx(TD_BASE, 'transition-colors duration-700', {
+            'bg-[var(--primary)]': popChanged,
+            'bg-transparent': !popChanged,
+          })}
         >
           {rowForYear?.population ?? 'N/A'}
         </td>
         <td
-          className={`${TD_BASE} transition-colors duration-700 ${
-            co2Changed ? 'bg-[var(--primary)]' : 'bg-transparent'
-          }`}
+          className={clsx(TD_BASE, 'transition-colors duration-700', {
+            'bg-[var(--primary)]': co2Changed,
+            'bg-transparent': !co2Changed,
+          })}
         >
           {rowForYear?.co2 ?? 'N/A'}
         </td>
         <td
-          className={`${TD_BASE} transition-colors duration-700 ${
-            perCapitaChanged ? 'bg-[var(--primary)]' : 'bg-transparent'
-          }`}
+          className={clsx(TD_BASE, 'transition-colors duration-700', {
+            'bg-[var(--primary)]': perCapitaChanged,
+            'bg-transparent': !perCapitaChanged,
+          })}
         >
           {rowForYear?.co2_per_capita ?? 'N/A'}
         </td>
