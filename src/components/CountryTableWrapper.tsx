@@ -1,9 +1,8 @@
 import CountryTable from '../components/CountryTable';
 import { useData } from '../hooks/useData';
-import type { Database } from '../types/CountryDataTypes';
 
 function CountryTableWrapper() {
-  const data: Database = useData();
+  const data = useData();
   return <CountryTable data={data} />;
 }
 
