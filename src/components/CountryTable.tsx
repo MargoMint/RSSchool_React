@@ -6,6 +6,7 @@ import useHighlightedRows from '../hooks/useHighlightedRows';
 import Search from './Search';
 import TableRow from './TableRow';
 import type { ChangeEvent } from 'react';
+import { getAllYears } from '../utils/getAllYears';
 
 enum SortMethod {
   NONE = 'none',
@@ -24,10 +25,7 @@ function CountryTable({ data }: CountryTableProps) {
 
   const [searchValue, setSearchValue] = useState<string>('');
 
-  const allYears = useMemo(() => {
-    const firstCountry = countries[0]?.[1];
-    return firstCountry ? firstCountry.data.map((row) => row.year) : [];
-  }, [countries]);
+  const allYears = useMemo(() => getAllYears(countries), [countries]);
 
   const [selectedYear, setSelectedYear] = useState<number>(
     allYears[allYears.length - 1]
