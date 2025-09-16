@@ -6,6 +6,12 @@ import useHighlightedRows from '../hooks/useHighlightedRows';
 import Search from './Search';
 import TableRow from './TableRow';
 
+enum SortMethod {
+  NONE = 'none',
+  ASC = 'asc',
+  DESC = 'desc',
+}
+
 const TH_BASE = 'border px-2 py-1 font-decor text-xl text-left';
 
 interface CountryTableProps {
@@ -31,17 +37,21 @@ function CountryTable({ data }: CountryTableProps) {
     selectedYear
   );
 
-  const [sortMethod, setSortMethod] = useState<'none' | 'asc' | 'desc'>('none');
+  const [sortMethod, setSortMethod] = useState<SortMethod>(SortMethod.NONE);
 
   const handleSortClick = () => {
     setSortMethod((prev) =>
-      prev === 'none' ? 'desc' : prev === 'desc' ? 'asc' : 'none'
+      prev === SortMethod.NONE
+        ? SortMethod.DESC
+        : prev === SortMethod.DESC
+          ? SortMethod.ASC
+          : SortMethod.NONE
     );
   };
 
   const countriesToDisplay = useMemo(
     () =>
-      sortMethod === 'none'
+      sortMethod === SortMethod.NONE
         ? countries
         : sortedCountries({ countries, selectedYear, order: sortMethod }),
     [countries, selectedYear, sortMethod]
