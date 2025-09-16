@@ -1,6 +1,6 @@
 import type { CountryData, YearlyRecord } from '../types/CountryDataTypes';
-import React from 'react';
 import type { UpdatedFlags } from '../utils/getHighlightedCountries';
+import { memo } from 'react';
 
 const TD_BASE = 'border px-2 py-1 text-center';
 
@@ -12,7 +12,7 @@ interface TableRowProps {
   yearChanged: boolean;
 }
 
-const TableRow = React.memo(
+const TableRow = memo(
   ({
     countryName,
     countryData,

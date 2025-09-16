@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import search from '../assets/search.png';
+import type { ChangeEvent, KeyboardEvent } from 'react';
 
 interface SearchProps {
   onSearch: (country: string) => void;
@@ -8,7 +9,7 @@ interface SearchProps {
 function Search({ onSearch }: SearchProps) {
   const [searchValue, setSearchValue] = useState<string>('');
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchValue(value);
     onSearch(value.trim());
@@ -20,7 +21,7 @@ function Search({ onSearch }: SearchProps) {
     onSearch(trimmedValue);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter') handleSearch();
   };
 

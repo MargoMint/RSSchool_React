@@ -5,6 +5,7 @@ import sort from '../assets/sort.png';
 import useHighlightedRows from '../hooks/useHighlightedRows';
 import Search from './Search';
 import TableRow from './TableRow';
+import type { ChangeEvent } from 'react';
 
 enum SortMethod {
   NONE = 'none',
@@ -70,12 +71,9 @@ function CountryTable({ data }: CountryTableProps) {
     setSearchValue(term);
   };
 
-  const handleYearChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setSelectedYear(+e.target.value);
-    },
-    []
-  );
+  const handleYearChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedYear(+e.target.value);
+  }, []);
 
   return (
     <div className="flex justify-center items-center py-10">
