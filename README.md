@@ -1,69 +1,90 @@
-# React + TypeScript + Vite
+# React Forms Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An educational project built as part of **RS School React course**.  
+The main goal is to demonstrate working with **forms, validation, modals, state management with Redux Toolkit, and testing**.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<div align="left">
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/React-20232a?style=for-the-badge&logo=react&logoColor=61dafb" />
+  <img src="https://img.shields.io/badge/Redux_Toolkit-764abc?style=for-the-badge&logo=redux&logoColor=white" />
+  <img src="https://img.shields.io/badge/React_Hook_Form-ec5990?style=for-the-badge&logo=reacthookform&logoColor=white" />
+  <img src="https://img.shields.io/badge/Yup-2c3e50?style=for-the-badge&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38b2ac?style=for-the-badge&logo=tailwind-css&logoColor=white" />
+  <img src="https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=white" />
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" />
+</div>
 
-## Expanding the ESLint configuration
+## 🚀 Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Modals (React Portals)**  
+  Two different forms inside shared modal components:
+  - Uncontrolled components form
+  - React Hook Form implementation
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **State Management (Redux Toolkit)**  
+  Stores all submitted form data and renders it on the main page.
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- **Form Functionality**  
+  Collects user input with validation for:
+  - Name (first letter capitalized)
+  - Age (positive number)
+  - Email
+  - Passwords (match check + strength rules: number, uppercase, lowercase, special character)
+  - Gender (radio/select)
+  - Terms & Conditions agreement
+  - Picture upload (PNG/JPEG, validated by size & format, stored in Redux as base64)
+  - Country autocomplete (data stored in Redux store)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+- **Validation (Yup)**
+  - React Hook Form: live validation, submit disabled until all fields are valid
+  - Uncontrolled form: validation only on submit
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- **UX Details**
+  - Focus management inside modals
+  - Close on ESC key or outside click
+  - Highlight newly added entries on the main page
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+- **Testing (React Testing Library + Vitest)**
+  - Form rendering and validation
+  - Password strength logic
+  - Modal accessibility and portal behavior
+  - Redux store (actions, reducers, selectors)
+  - Utility functions (image conversion, country filtering)
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+---
+
+## 🛠️ Tech Stack
+
+- **React 19**
+- **TypeScript**
+- **Redux Toolkit**
+- **React Hook Form**
+- **Yup**
+- **Tailwind CSS**
+- **Vite**
+- **React Testing Library + Vitest**
+
+---
+
+## ⚡ Getting Started
+
+```bash
+# Install dependencies
+npm install
+
+# Format code
+npm run format:fix
+
+# Linting
+npm run lint
+
+# Run tests
+npm run test
+npm run test:coverage
+
+# Run development server
+npm run dev
+
 ```

@@ -2,15 +2,19 @@ import type { FieldErrors, FieldError } from 'react-hook-form';
 import type { FormErrors } from './validateFormData';
 import type { FormTypes } from '../components/Forms/FormTypes';
 
+function isFieldError(error: unknown): error is FieldError {
+  return typeof error === 'object' && error !== null && 'message' in error;
+}
+
 function transformErrors(errors: FieldErrors<FormTypes>): FormErrors {
   const result: FormErrors = {};
-  for (const key in errors) {
-    const fieldKey = key as keyof FieldErrors<FormTypes>;
-    const err = errors[fieldKey] as FieldError | undefined;
-    if (err?.message) {
-      result[key] = err.message.toString();
+
+  Object.entries(errors).forEach(([key, error]) => {
+    if (isFieldError(error) && error.message) {
+      result[key] = error.message.toString();
     }
-  }
+  });
+
   return result;
 }
 

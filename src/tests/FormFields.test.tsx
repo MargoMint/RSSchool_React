@@ -1,13 +1,18 @@
 import { describe, expect } from 'vitest';
-import FormFields from '../components/Forms/FormFields';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Provider } from 'react-redux';
+import { store } from '../store/store';
+import FormFields from '../components/Forms/FormFields';
 
-describe('FormFields Component', () => {
+describe('FormFields', () => {
   const mockRegister = (name: string) => ({ 'data-testid': name, name });
 
+  const renderWithProvider = (data: React.ReactNode) =>
+    render(<Provider store={store}>{data}</Provider>);
+
   test('renders all form fields', () => {
-    render(<FormFields errors={{}} register={mockRegister} />);
+    renderWithProvider(<FormFields errors={{}} register={mockRegister} />);
 
     expect(screen.getByLabelText('Name')).toBeInTheDocument();
     expect(screen.getByLabelText('Age')).toBeInTheDocument();
@@ -28,14 +33,14 @@ describe('FormFields Component', () => {
       email: 'Email is invalid',
     };
 
-    render(<FormFields errors={errors} register={mockRegister} />);
+    renderWithProvider(<FormFields errors={errors} register={mockRegister} />);
 
     expect(screen.getByText('Name is required')).toBeInTheDocument();
     expect(screen.getByText('Email is invalid')).toBeInTheDocument();
   });
 
   test('allows typing in text fields', async () => {
-    render(<FormFields errors={{}} register={mockRegister} />);
+    renderWithProvider(<FormFields errors={{}} register={mockRegister} />);
     const userAction = userEvent.setup();
 
     const nameInput = screen.getByLabelText('Name') as HTMLInputElement;
@@ -48,7 +53,7 @@ describe('FormFields Component', () => {
   });
 
   test('allows selecting a gender', async () => {
-    render(<FormFields errors={{}} register={mockRegister} />);
+    renderWithProvider(<FormFields errors={{}} register={mockRegister} />);
     const userAction = userEvent.setup();
 
     const genderSelect = screen.getByLabelText('Gender') as HTMLSelectElement;
@@ -57,12 +62,13 @@ describe('FormFields Component', () => {
   });
 
   test('allows checking the accept terms checkbox', async () => {
-    render(<FormFields errors={{}} register={mockRegister} />);
+    renderWithProvider(<FormFields errors={{}} register={mockRegister} />);
     const userAction = userEvent.setup();
 
     const checkbox = screen.getByLabelText(
       'Accept Terms & Conditions'
     ) as HTMLInputElement;
+
     await userAction.click(checkbox);
     expect(checkbox.checked).toBe(true);
   });

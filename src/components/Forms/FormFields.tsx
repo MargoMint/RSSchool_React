@@ -1,5 +1,7 @@
-import Input from '../Input/Input';
-import ErrorMessage from '../../utils/ErrorMessage';
+import Input from '../Input';
+import ErrorMessage from '../ErrorMessage';
+import CountryOptions from './CountryOptions';
+import PasswordStrength from '../PasswordStrength';
 
 const FORM_FIELD_WRAPPER = 'flex flex-col';
 const FORM_LABEL = 'font-bold text-[var(--primary-pink)] mb-1';
@@ -9,9 +11,16 @@ const FORM_CONTROL_BASE =
 interface FormFieldsProps {
   errors: Record<string, string | undefined>;
   register?: (name: string) => Record<string, unknown>;
+  passwordValue?: string;
+  onPasswordChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-function FormFields({ errors, register }: FormFieldsProps) {
+function FormFields({
+  errors,
+  register,
+  passwordValue,
+  onPasswordChange,
+}: FormFieldsProps) {
   const reg = (name: string) => (register ? register(name) : { name });
 
   return (
@@ -70,7 +79,9 @@ function FormFields({ errors, register }: FormFieldsProps) {
             type="password"
             placeholder="Enter your password"
             variant={errors.password ? 'error' : 'base'}
+            onChange={onPasswordChange}
           />
+          <PasswordStrength password={passwordValue || ''} />
           <ErrorMessage message={errors.password} />
         </div>
         <div className={`${FORM_FIELD_WRAPPER} flex-[1]`}>
@@ -114,9 +125,14 @@ function FormFields({ errors, register }: FormFieldsProps) {
             {...reg('country')}
             type="text"
             placeholder="Enter country"
+            list="countries-list"
             variant={errors.country ? 'error' : 'base'}
           />
           <ErrorMessage message={errors.country} />
+
+          <datalist id="countries-list">
+            <CountryOptions />
+          </datalist>
         </div>
       </div>
 

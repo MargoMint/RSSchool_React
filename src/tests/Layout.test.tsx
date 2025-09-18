@@ -1,6 +1,6 @@
 import { describe, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import Layout from '../components/Layout/Layout';
+import Layout from '../components/Layout';
 
 describe('Layout', () => {
   test('renders without crashing', () => {

@@ -1,5 +1,6 @@
 import processFileToBase64 from './processFileToBase64';
 import type { StoredFormData } from '../components/Forms/FormTypes';
+import normalizePictureValue from './normalizePictureValue';
 
 export default async function normalizeFormValues(
   values: Record<string, unknown>
@@ -11,36 +12,26 @@ export default async function normalizeFormValues(
     copy.age = Number.isFinite(numericValue) ? numericValue : 0;
   }
 
-  if (copy.picture) {
-    const pict = copy.picture;
-    let fileToProcess: File | null = null;
-
-    if (pict instanceof File) {
-      fileToProcess = pict;
-    } else if (
-      typeof FileList !== 'undefined' &&
-      pict instanceof FileList &&
-      pict.length > 0
-    ) {
-      fileToProcess = pict[0];
-    } else if (
-      Array.isArray(pict) &&
-      pict.length > 0 &&
-      pict[0] instanceof File
-    ) {
-      fileToProcess = pict[0];
-    } else if (typeof pict === 'string') {
-      copy.picture = pict;
+  const normalizedPicture = normalizePictureValue(copy.picture);
+  if (normalizedPicture instanceof File) {
+    try {
+      copy.picture = await processFileToBase64(normalizedPicture);
+    } catch {
+      delete copy.picture;
     }
-
-    if (fileToProcess) {
-      try {
-        const base64 = await processFileToBase64(fileToProcess);
-        copy.picture = base64;
-      } catch {
-        delete copy.picture;
-      }
+  } else if (
+    Array.isArray(normalizedPicture) &&
+    normalizedPicture[0] instanceof File
+  ) {
+    try {
+      copy.picture = await processFileToBase64(normalizedPicture[0]);
+    } catch {
+      delete copy.picture;
     }
+  } else if (typeof normalizedPicture === 'string') {
+    copy.picture = normalizedPicture;
+  } else {
+    delete copy.picture;
   }
 
   copy.acceptTermsAndCondition = Boolean(

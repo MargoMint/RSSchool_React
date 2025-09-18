@@ -1,8 +1,13 @@
 import { describe, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import UncontrolledForm from '../components/Forms/UncontrolledForm/UncontrolledForm';
+import { Provider } from 'react-redux';
+import { store } from '../store/store';
+import UncontrolledForm from '../components/Forms/UncontrolledForm';
 import * as handleSubmitModule from '../utils/handleUncontrolledFormSubmit';
+
+const renderWithProvider = (data: React.ReactNode) =>
+  render(<Provider store={store}>{data}</Provider>);
 
 describe('UncontrolledForm', () => {
   const mockOnSubmit = vi.fn();
@@ -13,7 +18,9 @@ describe('UncontrolledForm', () => {
   });
 
   test('renders all required fields', () => {
-    render(<UncontrolledForm onSubmit={mockOnSubmit} onClose={mockOnClose} />);
+    renderWithProvider(
+      <UncontrolledForm onSubmit={mockOnSubmit} onClose={mockOnClose} />
+    );
     expect(screen.getByLabelText(/^Name$/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/^Age$/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/^Email$/i)).toBeInTheDocument();
@@ -32,7 +39,9 @@ describe('UncontrolledForm', () => {
       errors: { name: 'Name is required', email: 'Email is invalid' },
     });
 
-    render(<UncontrolledForm onSubmit={mockOnSubmit} onClose={mockOnClose} />);
+    renderWithProvider(
+      <UncontrolledForm onSubmit={mockOnSubmit} onClose={mockOnClose} />
+    );
 
     await user.click(screen.getByRole('button', { name: /submit/i }));
 
@@ -51,7 +60,9 @@ describe('UncontrolledForm', () => {
       errors: {},
     });
 
-    render(<UncontrolledForm onSubmit={mockOnSubmit} onClose={mockOnClose} />);
+    renderWithProvider(
+      <UncontrolledForm onSubmit={mockOnSubmit} onClose={mockOnClose} />
+    );
 
     await user.type(screen.getByLabelText(/name/i), 'Rita');
     await user.type(screen.getByLabelText(/email/i), 'rita@example.com');
@@ -74,7 +85,9 @@ describe('UncontrolledForm', () => {
         errors: {},
       });
 
-    render(<UncontrolledForm onSubmit={mockOnSubmit} onClose={mockOnClose} />);
+    renderWithProvider(
+      <UncontrolledForm onSubmit={mockOnSubmit} onClose={mockOnClose} />
+    );
 
     await user.click(screen.getByRole('button', { name: /submit/i }));
     expect(await screen.findByText('Name is required')).toBeInTheDocument();

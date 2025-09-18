@@ -1,10 +1,15 @@
 import { describe, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import ControlledForm from '../components/Forms/ControlledForm/ControlledForm';
+import { Provider } from 'react-redux';
+import { store } from '../store/store';
+import ControlledForm from '../components/Forms/ControlledForm';
 
 const mockOnSubmit = vi.fn();
 const mockOnClose = vi.fn();
+
+const renderWithProvider = (data: React.ReactNode) =>
+  render(<Provider store={store}>{data}</Provider>);
 
 describe('ControlledForm', () => {
   beforeEach(() => {
@@ -13,7 +18,9 @@ describe('ControlledForm', () => {
   });
 
   test('renders all form fields and buttons', () => {
-    render(<ControlledForm onSubmit={mockOnSubmit} onClose={mockOnClose} />);
+    renderWithProvider(
+      <ControlledForm onSubmit={mockOnSubmit} onClose={mockOnClose} />
+    );
 
     expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/age/i)).toBeInTheDocument();
@@ -32,7 +39,9 @@ describe('ControlledForm', () => {
   });
 
   test('submits the form with valid data', async () => {
-    render(<ControlledForm onSubmit={mockOnSubmit} onClose={mockOnClose} />);
+    renderWithProvider(
+      <ControlledForm onSubmit={mockOnSubmit} onClose={mockOnClose} />
+    );
 
     await userEvent.type(screen.getByLabelText(/name/i), 'Rita');
     await userEvent.type(screen.getByLabelText(/age/i), '23');
@@ -47,8 +56,7 @@ describe('ControlledForm', () => {
     const pictureInput = screen.getByLabelText(/picture/i) as HTMLInputElement;
     await userEvent.upload(pictureInput, file);
 
-    const submitButton = screen.getByRole('button', { name: /submit/i });
-    await userEvent.click(submitButton);
+    await userEvent.click(screen.getByRole('button', { name: /submit/i }));
 
     await waitFor(() => {
       expect(mockOnSubmit).toHaveBeenCalled();
@@ -57,7 +65,9 @@ describe('ControlledForm', () => {
   });
 
   test('calls onClose when Close button is clicked', async () => {
-    render(<ControlledForm onSubmit={mockOnSubmit} onClose={mockOnClose} />);
+    renderWithProvider(
+      <ControlledForm onSubmit={mockOnSubmit} onClose={mockOnClose} />
+    );
     await userEvent.click(screen.getByRole('button', { name: /close/i }));
     expect(mockOnClose).toHaveBeenCalled();
   });
