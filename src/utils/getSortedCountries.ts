@@ -13,14 +13,18 @@ function getSortedCountries({
 }: sortedCountriesProps) {
   if (order === 'none') return countries;
 
-  return countries.slice().sort((a, b) => {
-    const popA =
-      a[1].data.find((row) => row.year === selectedYear)?.population ?? 0;
-    const popB =
-      b[1].data.find((row) => row.year === selectedYear)?.population ?? 0;
+  const countriesWithPopulation = countries.map(([name, data]) => ({
+    name,
+    data,
+    population:
+      data.data.find((row) => row.year === selectedYear)?.population ?? 0,
+  }));
 
-    return order === 'asc' ? popA - popB : popB - popA;
-  });
+  countriesWithPopulation.sort((a, b) =>
+    order === 'asc' ? a.population - b.population : b.population - a.population
+  );
+
+  return countriesWithPopulation.map(({ name, data }) => [name, data]);
 }
 
 export default getSortedCountries;
