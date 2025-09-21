@@ -1,69 +1,61 @@
-# React + TypeScript + Vite
+# React Performance task
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a React application that visualizes CO2 emissions data by countries.  
+Users can filter, search, sort countries, and view detailed yearly statistics with customizable columns.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Fetch and display CO2 data (~100MB JSON)
+- React Suspense with loading spinner
+- Country list with name, population, ISO code
+- Year selector with data highlight
+- Search, filter, and sorting functionality
+- Performance optimization with useMemo, useCallback, React.memo
 
-## Expanding the ESLint configuration
+## Performance Profiling
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Before Optimization
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. Sorting countries by population.
+   Commit Duration: 109.2 ms
+   Render Duration (CountryTable): ~89.4 ms
+   Description: When sorting, the entire table of countries is recalculated and redrawn.
+   <img width="688" height="200" alt="image" src="https://github.com/user-attachments/assets/d2b5d5a5-793c-47d3-b098-395c2e259b57" />
+   <img width="693" height="153" alt="image" src="https://github.com/user-attachments/assets/3fbf8142-f1ff-422e-8d9f-743446c16959" />
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+2. Searching country by name.
+   Commit Duration: ~108.2 ms
+   Render Duration (CountryTable): ~90.2 ms
+   Description: When you enter each character in the search, the table is fully rendered.
+   <img width="690" height="197" alt="image" src="https://github.com/user-attachments/assets/bc431afb-916a-41a8-815f-72545684cb6f" />
+   <img width="690" height="145" alt="image" src="https://github.com/user-attachments/assets/9553350d-dbba-4e0c-ae42-43fe098ea9e7" />
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+3. Changing year and re-rendering data.
+   Commit Duration: ~117 ms
+   Render Duration (CountryTable): ~98.5 ms
+   Description: When the year changes, all the changed values are displayed again.
+   <img width="692" height="206" alt="image" src="https://github.com/user-attachments/assets/b96f0ece-034a-48f9-8bb0-f4e1c243bbb6" />
+   <img width="701" height="163" alt="image" src="https://github.com/user-attachments/assets/f97b9c68-218b-4c18-a2c5-0082a28b6625" />
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### After Optimization (useMemo, useCallback, React.memo)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. Sorting countries by population.
+   Commit Duration: 192.3 ms
+   Render Duration (CountryTable): ~20.6 ms
+   Description: When sorting, the entire table of countries is recalculated and redrawn.
+   <img width="690" height="203" alt="image" src="https://github.com/user-attachments/assets/0b08815c-6431-4f55-b6f6-634c33ca1be5" />
+   <img width="697" height="454" alt="image" src="https://github.com/user-attachments/assets/179a5f08-627b-4332-b6a2-e81559595f05" />
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+2. Searching country by name.
+   Commit Duration: ~181.3 ms
+   Render Duration (CountryTable): ~19.5 ms
+   Description: When you enter each character in the search, the table is fully rendered.
+   <img width="691" height="204" alt="image" src="https://github.com/user-attachments/assets/b940bdc5-e18e-4a33-bb1b-cac42ad21ea1" />
+   <img width="692" height="640" alt="image" src="https://github.com/user-attachments/assets/8c26ac06-6c35-4f5d-99cc-0c22572ce0cd" />
+
+3. Changing year and re-rendering data.
+   Commit Duration: ~185.8 ms
+   Render Duration (CountryTable): ~19.4 ms
+   Description: When the year changes, all the changed values are displayed again.
+   <img width="695" height="202" alt="image" src="https://github.com/user-attachments/assets/173f9177-7fd8-4611-a94f-a60c9f59a77a" />
+   <img width="690" height="593" alt="image" src="https://github.com/user-attachments/assets/0f8e42a6-5c01-4109-a320-ea1900e05e75" />
